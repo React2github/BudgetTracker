@@ -1,0 +1,26 @@
+{
+  "name": "full-stack-financial-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/React2github/Full-Stack-Financial-Tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/React2github/Full-Stack-Financial-Tracker/issues"
+  },
+  "homepage": "https://github.com/React2github/Full-Stack-Financial-Tracker#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "pg": "^8.2.0",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.21.9"
+  }
+}
