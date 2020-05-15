@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BudgetTracker</title>
+    <link rel="stylesheet" href="index.css" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <!--HEADER CONTENT-->
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">BudgetTracker</h1>
+        <!--<p class="lead">
+          This is a modified jumbotron that occupies the entire horizontal space
+          of its parent.
+        </p>-->
+      </div>
+
+      <div class="button">
+        <button type="button" class="btn btn-dark">Logout</button>
+      </div>
+    </div>
+    <div class="greeting">
+      <!--USER FIELD WILL POPULATE WITH INFO FROM DATABASE.-->
+      <h2>Hello, USER!</h2>
+    </div>
+
+    <div class="expenses">
+      <h3>Your Monthly Bills</h3>
+      <ul class="nav justify-content-end">
+        <li class="nav-item">
+            <!--ADD LINK TO MONTHLY BILLS PAGE BELOW-->
+          <a class="nav-link active" href="index.html">View Weekly Expenses</a>
+        </li>
+    </div>
+    <hr/>
+
+<div class="expenses-chart">
+    <!--RENDER EXPENSES CHART-->
+</div>
+
+<div class="expenses-list">
+    <!--RENDER EXPENSES LIST-->
+    <div class="dropdown">
+        <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Add a Bill
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="#">Rent/Mortgage</a>
+          <a class="dropdown-item" href="#">Water</a>
+          <a class="dropdown-item" href="#">Electricity/Gas</a>
+          <a class="dropdown-item" href="#">Car</a>
+          <a class="dropdown-item" href="#">Other</a>
+        </div>
+      </div>
+</div>
+
+  </body>
+</html>
