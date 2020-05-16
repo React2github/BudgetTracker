@@ -1,13 +1,21 @@
 const express = require('express');
 const session = require('express-session');
+PORT = process.env.PORT || 3020;
+
 
 const app = express();
-app.use(session());
-
+app.use(session({
+    secret: 'keyboard cat', 
+    resave: true, 
+    saveUninitialized: true }));
 
 
 
 //tasting as I go
+app.get('/', (req,res) => {
+    res.send('Hello World!')
+})
+
 app.get('/ping', (req, res, next) => {
     res.send('PONG!');
 });
@@ -60,6 +68,6 @@ app.post('/expenses', function(req, res, next) {
 
 
 
-app.listen(3020, function(){
-    console.log('This server is listening..')
+app.listen(PORT, function(){
+    console.log(`'This server is listening on ${PORT}..'`)
 })
