@@ -26,13 +26,11 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-// Testing
+// Homepage
 
 app.get('/', (req,res) => {
-    res.send('Hello World!')
+    res.redirect('/login');
 })
-
-var Users = [];
 
 // Route for Registering Users (Local Strategy)
 
@@ -59,6 +57,7 @@ app.post('/register', async (req, res) => {
        
 
 // Route for Login (Local Strategy)
+
 app.get('/login', (req, res) => {
     res.render('login.ejs')
 })
