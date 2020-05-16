@@ -1,0 +1,44 @@
+h2,
+h3 {
+  font-family: Arial;
+}
+
+.button {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 75px;
+  align-items: baseline;
+}
+
+.greeting {
+  margin: 50px;
+}
+.expenses-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.expenses-chart {
+  display: flex;
+  align-content: flex-start;
+  align-items: baseline;
+  justify-content: flex-start;
+  margin: 50px;
+}
+
+.expenses-list {
+  display: flex;
+  align-content: flex-end;
+  justify-content: flex-end;
+  /*align-self: flex-end;*/
+}
+
+.dropdown {
+  display: flex;
+  align-items: flex-end;
+}
+
+.expenses {
+  margin: 50px;
+}
