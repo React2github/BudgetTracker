@@ -3,7 +3,6 @@ if(process.env.Node_ENV !== 'production') {
 }
 
 const express = require('express');
-const passport = require('passport');
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
 const session = require('express-session');
@@ -12,19 +11,54 @@ const db = require('./models');
 const { pool } = require('./dbConfig');
 const app = express();
 
-PORT = process.env.PORT || 3020;
 app.set('view engine', 'ejs');
+app.set('views', 'views');
 
-app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.json());
-app.use(flash())
+
+//Begin Passport 
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: 'http://localhost:3005/auth/google/callback'
+ },
+ function(accessToken, refreshToken, profile, done) {
+    console.log(profile.emails[0].value);
+    //return done(null, profile); 
+    
+    var values = {email: profile.emails[0].value};
+   /*  db.user.findOrCreate({where: {email: profile.emails[0].value}}, values)
+        .then(function() {
+            return done(err, user);
+        }); */
+      db.user.findOrCreate({email: profile.emails[0].value}, function (err, user) {
+         return done(err, user); 
+     });
+ } 
+));
+
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(session({
     secret: process.env.SESSION_SECRET, 
     resave: true, 
     saveUninitialized: true }));
 
-app.use(passport.initialize())
-app.use(passport.session())
+passport.serializeUser((user, done) => {
+    done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+    done(null, user);
+});
+//END Passport Code
+
+app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.json());
+app.use(flash())
+
 
 // Homepage
 
@@ -93,10 +127,21 @@ app.post('dashboard/login', function(req, res){
     }
  });
 
-// Route for Dashboard
-app.get('/dashboard', function (req, res) {
-    res.render('index');
-});
+//***********Google log-in route***********
+app.get('/auth/google', passport.authenticate('google', {
+    scope: ['profile', 'email']
+    }
+));
+
+//***********Google callback URL***********
+app.get('/auth/google/callback', 
+passport.authenticate('google', {failureRedirect: '/login'}),
+    (req, res) => {
+        return res.redirect("/bills")
+    }
+)
+
+
 
 
 //route for logout
@@ -113,6 +158,15 @@ app.post('/bills', function(req, res, next) {
     res.render('bills');
 });
 
+app.get('/bills', function(req, res, next) {
+    res.render('bills', {
+        name: req.user.displayName
+    });
+    // console.log(req.user.emails[0].value);
+    /* console.log(req.sessionID);
+    console.log(req.session); */
+});
+
 //route for expenses
 app.post('/expenses', function(req, res, next) {
     res.render('expenses');
@@ -124,24 +178,6 @@ app.post('/expenses', function(req, res, next) {
 
 
 
-app.post('/api/createuser', (req, res) => {
-    // Take in request params and create new user, return response
-    console.log(req.body);
-    const user = req.body;
-    const password = req.body.password;
-    bcrypt.hash(password, 10)
-        .then((hash) => {
-            user.password = hash;
-            db.user.create(user)
-                .then((results) => {
-                    res.json(results);
-                })
-                .catch((err) => {
-                    console.error(err);
-                })
-        })
-})
-
 app.listen(PORT, function(){
     console.log(`'This server is listening on ${PORT}..'`)
-})
+});
