@@ -26,15 +26,37 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-//tasting as I go
+// Testing
+
 app.get('/', (req,res) => {
     res.send('Hello World!')
 })
 
-app.get('/ping', (req, res, next) => {
-    res.send('PONG!');
-});
 var Users = [];
+
+// Route for Registering Users (Local Strategy)
+
+app.get('/register', (req, res) => {
+    res.render('register.ejs')
+})
+
+app.post('/register', async (req, res) => {
+    let { name, email, password } = req.body;
+    
+    const hashedPassword = await bcrypt.hash(password, 10);
+       pool.query(`INSERT INTO public.accounts (name, email, password) 
+       VALUES ($1, $2, $3)
+       RETURNING id, password`, [name, email, hashedPassword],  
+       (err, results) => {
+               if (err) {
+                throw err;
+               }
+               req.flash('success_msg', "You are now registered. Please log in");
+               res.redirect('/login');
+           })
+       
+        });
+       
 
 // Route for Login (Local Strategy)
 app.get('/login', (req, res) => {
@@ -48,7 +70,9 @@ app.post('/login', passport.authenticate('local', {
 })); 
 
 
-//route for logins
+//route for logins 
+// (Do we need this? - Ab) 
+
 app.get('/dashboard/login', function(req, res, next) {
     res.render('login');
 });
@@ -76,30 +100,6 @@ app.get('logout', function(req, res, next) {
     })
     res.redirect('/login');
 });
-//route for registering users (Local Strategy)
-
-app.get('/register', (req, res) => {
-    res.render('register.ejs')
-})
-
-app.post('/register', async (req, res) => {
-    let { name, email, password } = req.body;
-    
-    const hashedPassword = await bcrypt.hash(password, 10);
-       pool.query(`INSERT INTO public.accounts (name, email, password) 
-       VALUES ($1, $2, $3)
-       RETURNING id, password`, [name, email, hashedPassword],  
-       (err, results) => {
-               if (err) {
-                throw err;
-               }
-               req.flash('success_msg', "You are now registered. Please log in");
-               res.redirect('/login');
-           })
-       
-        });
-       
-    
 
 
 //route for bills
@@ -112,7 +112,10 @@ app.post('/expenses', function(req, res, next) {
     res.render('expenses');
 });
 
-//route for display data
+//route for displaying data
+
+// Route for registering users?
+
 
 
 app.post('/api/createuser', (req, res) => {
