@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/React2github/Full-Stack-Financial-Tracker#readme",
   "dependencies": {
+    "bcrypt": "^4.0.1",
+    "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
