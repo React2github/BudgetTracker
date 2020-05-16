@@ -15,6 +15,9 @@ To build a web app utilizing backend development skills.
 
 ## How it Works
 
+Users can create an account and login to their dashboard. They will be able to enter their weekly expenses and monthly bills.
+The app will create a pie graph breakdown of their spending habits and they will get a visual display of their budget. 
+
 ## Problems During Development
 
 
