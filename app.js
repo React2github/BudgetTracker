@@ -1,19 +1,30 @@
+if(process.env.Node_ENV !== 'production') {
+    require('dotenv').config()
+}
+
 const express = require('express');
+const passport = require('passport');
 const bodyParser = require('body-parser');
+const flash = require('express-flash');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
 const db = require('./models');
+const { pool } = require('./dbConfig');
 const app = express();
 
 PORT = process.env.PORT || 3020;
+app.set('view engine', 'ejs');
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
+app.use(flash())
 app.use(session({
-    secret: 'keyboard cat', 
+    secret: process.env.SESSION_SECRET, 
     resave: true, 
     saveUninitialized: true }));
 
+app.use(passport.initialize())
+app.use(passport.session())
 
 //tasting as I go
 app.get('/', (req,res) => {
@@ -24,6 +35,18 @@ app.get('/ping', (req, res, next) => {
     res.send('PONG!');
 });
 var Users = [];
+
+// Route for Login (Local Strategy)
+app.get('/login', (req, res) => {
+    res.render('login.ejs')
+})
+
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+})); 
+
 
 //route for logins
 app.get('/dashboard/login', function(req, res, next) {
@@ -53,8 +76,30 @@ app.get('logout', function(req, res, next) {
     })
     res.redirect('/login');
 });
-//route for user
+//route for registering users (Local Strategy)
 
+app.get('/register', (req, res) => {
+    res.render('register.ejs')
+})
+
+app.post('/register', async (req, res) => {
+    let { name, email, password } = req.body;
+    
+    const hashedPassword = await bcrypt.hash(password, 10);
+       pool.query(`INSERT INTO public.accounts (name, email, password) 
+       VALUES ($1, $2, $3)
+       RETURNING id, password`, [name, email, hashedPassword],  
+       (err, results) => {
+               if (err) {
+                throw err;
+               }
+               req.flash('success_msg', "You are now registered. Please log in");
+               res.redirect('/login');
+           })
+       
+        });
+       
+    
 
 
 //route for bills

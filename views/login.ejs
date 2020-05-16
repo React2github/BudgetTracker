@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <style>
+        .main {
+            display: flex;
+            justify-content: center;
+            padding: 2px;
+        }
+        .box {
+            border-width: 100px;
+            padding: 10px;
+            background-color: beige;
+            border: 1px solid black;
+        }
+        .items {
+          padding-bottom: 5px;
+          padding: 2px;
+        }
+    </style>
+    </head>
+    <body>
+        <h1 class="main">Login</h1>
+        <ul>
+            <% if (messages.success_msg) { %>
+            <li><%= messages.success_msg %></li>
+            <% } %>
+            </ul>
+            <div class='main' >
+        <form action="/login" method="POST" class='box'>
+        <div class='items'>
+            <label for='email'>Email</label>
+            <input type='email' id='email' name='email' 
+            required>
+        </div>
+        <div class='items'>
+            <label for='password'>Password</label>
+            <input type='password' id='password' name='password' 
+            required>
+        </div>
+        <button type="submit">Login</button>
+        <a href='/register'>Register</a>
+        </form>
+
+    </div>
+</body>
+</html>
