@@ -93,6 +93,13 @@ app.post('dashboard/login', function(req, res){
        res.redirect('/protected_page');
     }
  });
+
+// Route for Dashboard
+app.get('/dashboard', function (req, res) {
+    res.render('index');
+});
+
+
 //route for logout
 app.get('logout', function(req, res, next) {
     req.session.destroy(function() {
