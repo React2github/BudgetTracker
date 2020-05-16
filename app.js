@@ -3,11 +3,11 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
 const db = require('./models');
+const app = express();
 
 PORT = process.env.PORT || 3020;
 
 app.use(express.static(__dirname + '/public'));
-const app = express();
 app.use(bodyParser.json());
 app.use(session({
     secret: 'keyboard cat', 
