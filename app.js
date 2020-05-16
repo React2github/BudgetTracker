@@ -113,6 +113,11 @@ app.post('/expenses', function(req, res, next) {
 });
 
 //route for displaying data
+app.get('/user/:id', function(req, res, next) {
+    res.send('user' + req.params.id);
+});
+
+
 
 // Route for registering users?
 
