@@ -21,15 +21,11 @@ passport.use(new GoogleStrategy({
  function(accessToken, refreshToken, profile, done) {
     console.log(profile.emails[0].value);
     //return done(null, profile); 
-    
-    var values = {email: profile.emails[0].value};
-   /*  db.user.findOrCreate({where: {email: profile.emails[0].value}}, values)
-        .then(function() {
-            return done(err, user);
-        }); */
-      db.user.findOrCreate({email: profile.emails[0].value}, function (err, user) {
-         return done(err, user); 
-     });
+     db.user.findOrCreate({
+         where: {email: profile.emails[0].value}, function (err, user) {
+                return done(err,user);}  
+        });
+        return done(null, profile);
  } 
 ));
 
@@ -56,6 +52,10 @@ var Users = [];
 //route for logins
 app.get('/dashboard/login', function(req, res, next) {
     res.render('login');
+    /* db.user.create({firstname: 'Tess', lastname: 'McTest', email: 'test@mail.com', password: 'mypw', budget: 200})
+        .then(function(user) {
+            console.log(user);
+        }) */
 });
 app.post('dashboard/login', function(req, res){
     if(!req.body.id || !req.body.password){
