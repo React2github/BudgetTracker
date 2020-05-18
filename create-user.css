@@ -1,16 +1,14 @@
-#title-box{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-image: image('Business-Stock.jpg');
-    padding-top: 150px;
+.containers {
+    position: absolute;
+    width: 350px;
+    height: 250px;
+    z-index: 15;
+    top: 50%;
+    left: 50%;
+    margin: -100px 0 0 -150px;
+    padding-bottom: 10px;
 }
 
-/* Bordered form */
-form {
-    border: 3px solid #f1f1f1;
-  }
-  
   /* Full-width inputs */
   input[type=text], input[type=password] {
     width: 100%;
@@ -32,13 +30,11 @@ form {
     width: 100%;
   }
 
-.containers {
-    position: absolute;
-    width: 350px;
-    height: 250px;
-    z-index: 15;
-    top: 50%;
-    left: 50%;
-    margin: -100px 0 0 -150px;
-    padding-bottom: 10px;
+
+#title-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: image('Business-Stock.jpg');
+    padding-top: 200px;
 }
