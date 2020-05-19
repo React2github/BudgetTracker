@@ -20,6 +20,7 @@ The app will create a pie graph breakdown of their spending habits and they will
 
 ## Problems During Development
 
+Conflicts can occur often when code reviewing pull requests. It's important for all contributers to be current with master so when local changes are pushed into the repo, manual corrections can be kept to a minimium. 
 
 ## Deployment
 * [Heroku](https://www.heroku.com/)
