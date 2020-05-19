@@ -24,7 +24,7 @@ const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://localhost:3005/auth/google/callback'
+    callbackURL: 'http://localhost:3000/auth/google/callback'
  },
  function(accessToken, refreshToken, profile, done) {
     console.log(profile.emails[0].value);
@@ -41,7 +41,7 @@ passport.use(new GoogleStrategy({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(session({
-    secret: process.env.SESSION_SECRET, 
+    secret: 'abcdefg',//process.env.SESSION_SECRET, 
     resave: true, 
     saveUninitialized: true }));
 
@@ -162,8 +162,9 @@ app.post('/bills', function(req, res, next) {
 });
 
 app.get('/bills', function(req, res, next) {
+    console.log(req.body)
     res.render('bills', {
-        name: req.user.displayName
+        name: profile.name.givenName
     });
     // console.log(req.user.emails[0].value);
     /* console.log(req.sessionID);
