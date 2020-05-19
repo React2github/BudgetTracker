@@ -10,6 +10,7 @@ const bcrypt = require('bcrypt');
 const db = require('./models');
 const { pool } = require('./dbConfig');
 const app = express();
+PORT = process.env.PORT || 3000;
 
 
 app.set('view engine', 'ejs');
