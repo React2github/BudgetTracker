@@ -11,21 +11,18 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
-
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
   </head>
   <body>
     <!--HEADER CONTENT-->
     <div class="jumbotron jumbotron-fluid">
       <div class="container">
         <h1 class="display-4">BudgetTracker</h1>
-        <!--<p class="lead">
-          This is a modified jumbotron that occupies the entire horizontal space
-          of its parent.
-        </p>-->
       </div>
 
       <div class="button">
-        <button type="button" class="btn btn-dark">Logout</button>
+        <button type="button" class="btn btn-dark" href="login.html">Logout</button>
       </div>
     </div>
     <div class="greeting">
@@ -41,15 +38,16 @@
           <a class="nav-link active" href="bills.html">View Monthly Bills</a>
         </li>
     </div>
-    <hr/>
+   
 <div class="expenses-container">
 <div class="expenses-chart">
-    <!--RENDER EXPENSES CHART-->
+    <!--RENDER WEEKLY EXPENSES CHART. CAN ADJUST THE ASPECT RATIO AS NEEDED-->
+    <div class="ct-chart ct-perfect-fourth"></div>
     <a href="https://placeholder.com"><img src="https://via.placeholder.com/700"></a>
 </div>
 
 <div class="expenses-list">
-    <!--RENDER EXPENSES LIST-->
+    <!--RENDER WEEKLY EXPENSES LIST-->
     <a href="https://placeholder.com"><img src="https://via.placeholder.com/600"></a>
     
     <div class="dropdown">
