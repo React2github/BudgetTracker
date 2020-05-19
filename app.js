@@ -169,6 +169,7 @@ app.get('/bills', function(req, res, next) {
     // console.log(req.user.emails[0].value);
     /* console.log(req.sessionID);
     console.log(req.session); */
+     console.log(req.user.firstname)
 });
 
 //route for expenses
