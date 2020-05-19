@@ -11,6 +11,7 @@ const db = require('./models');
 const { pool } = require('./dbConfig');
 const app = express();
 
+
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
@@ -26,9 +27,10 @@ passport.use(new GoogleStrategy({
  },
  function(accessToken, refreshToken, profile, done) {
     console.log(profile.emails[0].value);
+    console.log(profile.name.givenName);
     //return done(null, profile); 
-     db.user.findOrCreate({
-         where: {email: profile.emails[0].value}, function (err, user) {
+     db.user.findOrCreate({  //This works as long as the user does not update their name on their Google account later on.. If their name changes, a new account is created...
+         where: {email: profile.emails[0].value, firstname: profile.name.givenName, lastname: profile.name.familyName}, function (err, user) {
                 return done(err,user);}  
         });
         return done(null, profile);
