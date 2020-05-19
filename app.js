@@ -1,13 +1,20 @@
-const express = require('express');
-const session = require('express-session');
+if(process.env.Node_ENV !== 'production') {
+    require('dotenv').config()
+}
 
+const express = require('express');
+const bodyParser = require('body-parser');
+const flash = require('express-flash');
+const session = require('express-session');
+const bcrypt = require('bcrypt');
+const db = require('./models');
+const { pool } = require('./dbConfig');
 const app = express();
-app.use(session({secret}));
+
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-const db = require('./models');
 
 //Begin Passport 
 const passport = require('passport');
@@ -32,6 +39,10 @@ passport.use(new GoogleStrategy({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(session({
+    secret: process.env.SESSION_SECRET, 
+    resave: true, 
+    saveUninitialized: true }));
 
 passport.serializeUser((user, done) => {
     done(null, user);
@@ -42,15 +53,57 @@ passport.deserializeUser((user, done) => {
 });
 //END Passport Code
 
+app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.json());
+app.use(flash())
 
 
-//tasting as I go
-app.get('/ping', (req, res, next) => {
-    res.send('PONG!');
-});
-var Users = [];
+// Homepage
 
-//route for logins
+app.get('/', (req,res) => {
+    res.redirect('/login');
+})
+
+// Route for Registering Users (Local Strategy)
+
+app.get('/register', (req, res) => {
+    res.render('register.ejs')
+})
+
+app.post('/register', async (req, res) => {
+    let { name, email, password } = req.body;
+    
+    const hashedPassword = await bcrypt.hash(password, 10);
+       pool.query(`INSERT INTO public.accounts (name, email, password) 
+       VALUES ($1, $2, $3)
+       RETURNING id, password`, [name, email, hashedPassword],  
+       (err, results) => {
+               if (err) {
+                throw err;
+               }
+               req.flash('success_msg', "You are now registered. Please log in");
+               res.redirect('/login');
+           })
+       
+        });
+       
+
+// Route for Login (Local Strategy)
+
+app.get('/login', (req, res) => {
+    res.render('login.ejs')
+})
+
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+})); 
+
+
+//route for logins 
+// (Do we need this? - Ab) 
+
 app.get('/dashboard/login', function(req, res, next) {
     res.render('login');
     /* db.user.create({firstname: 'Tess', lastname: 'McTest', email: 'test@mail.com', password: 'mypw', budget: 200})
@@ -100,8 +153,6 @@ app.get('logout', function(req, res, next) {
     })
     res.redirect('/login');
 });
-//route for user
-
 
 
 //route for bills
@@ -123,10 +174,12 @@ app.post('/expenses', function(req, res, next) {
     res.render('expenses');
 });
 
-//route for display data
+//route for displaying data
+
+// Route for registering users?
 
 
 
-app.listen(3005, function(){
-    console.log('This server is listening..')
-})
+app.listen(PORT, function(){
+    console.log(`'This server is listening on ${PORT}..'`)
+});
