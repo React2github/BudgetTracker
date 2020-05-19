@@ -1,49 +1,34 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <style>
-            .main {
-                display: flex;
-                justify-content: center;
-                padding: 2px;
-            }
-            .box {
-                border-width: 100px;
-                padding: 10px;
-                background-color: beige;
-                border: 1px solid black;
-            }
-            .items {
-            padding-bottom: 5px;
-            padding: 2px;
-            }
-        </style>
-    </head>
-        <body>
-
-            <h1 class='main'>Register</h1>
-
-            <div class='main'>
-            <form action="/register" method="POST" class='box'>
-            <div class='items'>
-            <label for='name'>Name</label>
-            <input type="text" id='name' name='name' 
-            required>
-            </label>   
-            </div>
-            <div class='items'>
-                <label for='email'>Email</label>
-                <input type='email' id='email' name='email' 
-                required>
-            </div>
-            <div class='items'>
-                <label for='password'>Password</label>
-                <input type='password' id='password' name='password' 
-                required>
-            </div>
-            <button type="submit">Register</button>
-            <a href='/login'>Login</a>
-            </form>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a User</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="register.css" />
+</head>
+<body>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <h1 class="display-4">BudgetTracker</h1>
         </div>
-        </body>
+      </div>
+    <div class="containers">
+        <div class="login-input">
+            <label for="uname"><b>User</b></label>
+            <input type="text" placeholder="Enter User" name="uname" required>
+        </div>
+        <div class="login-input">
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" required>
+        </div>
+        <div class="login-input">
+            <label for="uname"><b>Email</b></label>
+            <input type="text" placeholder="Enter Email" name="psw" required>
+        </div>
+        <div class="login-input">
+            <button type="submit"></a>Create User</button>
+        </div>
+    </div>
+</body>
 </html>
