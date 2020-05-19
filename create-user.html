@@ -3,32 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>    
+    <title>Create a User</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
-    <link rel="stylesheet" href="login.css"/>
+    <link rel="stylesheet" href="create-user.css" />
 </head>
 <body>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
           <h1 class="display-4">BudgetTracker</h1>
         </div>
-    </div>
-    <div class="container" style="background-color:#f1f1f1">
-            <div class='login-input'>
-                <label for='email'><b>Email</b></label>
-                <input type='email' id='email' name='email' 
-                required>
-            </div>
+      </div>
+    <div class="containers">
         <div class="login-input">
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="password" required>
+            <label for="uname"><b>User</b></label>
+            <input type="text" placeholder="Enter User" name="uname" required>
         </div>
         <div class="login-input">
-            <button type="submit">Login</button>
-            <label>
-            <input type="checkbox" checked="blank" name="remember"> Remember me
-            </label>
-            <h4 class="psw"><a href="/register">Create User</a></h4>
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" required>
+        </div>
+        <div class="login-input">
+            <label for="uname"><b>Email</b></label>
+            <input type="text" placeholder="Enter Email" name="psw" required>
+        </div>
+        <div class="login-input">
+            <button type="submit"></a>Create User</button>
         </div>
     </div>
 </body>
