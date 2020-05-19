@@ -134,12 +134,14 @@ app.post('dashboard/login', function(req, res){
 app.get('/auth/google', passport.authenticate('google', {
     scope: ['profile', 'email']
     }
+    
 ));
 
 //***********Google callback URL***********
 app.get('/auth/google/callback', 
 passport.authenticate('google', {failureRedirect: '/login'}),
     (req, res) => {
+        console.log(req.body)
         return res.redirect("/bills")
     }
 )
@@ -157,14 +159,14 @@ app.get('logout', function(req, res, next) {
 
 
 //route for bills
-app.post('/bills', function(req, res, next) {
+/* app.post('/bills', function(req, res, next) {
     res.render('bills');
-});
+}); */
 
 app.get('/bills', function(req, res, next) {
     console.log(req.body)
     res.render('bills', {
-        name: profile.name.givenName
+        name: req.user.givenName //profile.name.givenName
     });
     // console.log(req.user.emails[0].value);
     /* console.log(req.sessionID);
