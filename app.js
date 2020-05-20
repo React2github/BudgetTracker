@@ -189,7 +189,7 @@ app.get('/bills', function(req, res, next) {
 });
 
 //route for expenses
-app.post('/expenses', function(req, res, next) {
+app.get('/expenses', function(req, res, next) {
     res.render('expenses');
 });
 
