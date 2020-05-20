@@ -1,11 +1,9 @@
 #title-box{
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-image: image('Business-Stock.jpg');
-}
-
-#header {
-    display: block;
-    text-align: center;
+    padding-top: 150px;
 }
 
 /* Bordered form */
@@ -34,16 +32,13 @@ form {
     width: 100%;
   }
 
-.container {
+.containers {
     position: absolute;
-    width: 300px;
-    height: 200px;
+    width: 350px;
+    height: 250px;
     z-index: 15;
     top: 50%;
     left: 50%;
     margin: -100px 0 0 -150px;
-}
-
-.login-input {
-    padding: 20px;
+    padding-bottom: 10px;
 }

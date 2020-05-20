@@ -1,0 +1,40 @@
+.containers {
+    position: absolute;
+    width: 350px;
+    height: 250px;
+    z-index: 15;
+    top: 50%;
+    left: 50%;
+    margin: -100px 0 0 -150px;
+    padding-bottom: 10px;
+}
+
+  /* Full-width inputs */
+  input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  
+  /* Set a style for all buttons */
+  button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+  }
+
+
+#title-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: image('Business-Stock.jpg');
+    padding-top: 200px;
+}

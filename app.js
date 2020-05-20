@@ -3,7 +3,6 @@ if(process.env.Node_ENV !== 'production') {
 }
 
 const express = require('express');
-const passport = require('passport');
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
 const session = require('express-session');
@@ -11,28 +10,74 @@ const bcrypt = require('bcrypt');
 const db = require('./models');
 const { pool } = require('./dbConfig');
 const app = express();
+PORT = process.env.PORT || 3000;
 
-PORT = process.env.PORT || 3020;
+
 app.set('view engine', 'ejs');
+app.set('views', 'views');
+app.use(session({
+    secret: 'abcdefg',//process.env.SESSION_SECRET, 
+    resave: true, 
+    saveUninitialized: true }));
+
+//Begin Passport 
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: 'http://localhost:3000/auth/google/callback'
+ },
+ function(accessToken, refreshToken, profile, done) {
+    console.log(profile.emails[0].value);
+    console.log(profile.name.givenName);
+    //return done(null, profile); 
+     db.user.findOrCreate({  //This works as long as the user does not update their name on their Google account later on.. If their name changes, a new account is created...
+         where: {email: profile.emails[0].value, firstname: profile.name.givenName, lastname: profile.name.familyName}})
+         .then(user => {
+             return done(null, user)
+         })
+         .catch(e => {
+             return done(e)
+         })
+         /* , function (err, user) {return done(err,user);}  
+        }); */
+ } 
+));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+
+passport.serializeUser((user, done) => {
+    //console.log(user);
+    done(null, user[0].id);
+});
+
+passport.deserializeUser((user, done) => {
+    console.log('The user is ' + user);
+    db.user.findByPk(user)
+    .then(function(user){
+        done(null, user);
+    })
+    .catch(e => {
+        return done(e)
+    })
+});
+//END Passport Code
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(flash())
-app.use(session({
-    secret: process.env.SESSION_SECRET, 
-    resave: true, 
-    saveUninitialized: true }));
 
-app.use(passport.initialize())
-app.use(passport.session())
 
-// Testing
+// Homepage
 
 app.get('/', (req,res) => {
-    res.send('Hello World!')
+    res.redirect('/login');
 })
-
-var Users = [];
 
 // Route for Registering Users (Local Strategy)
 
@@ -59,6 +104,7 @@ app.post('/register', async (req, res) => {
        
 
 // Route for Login (Local Strategy)
+
 app.get('/login', (req, res) => {
     res.render('login.ejs')
 })
@@ -75,6 +121,10 @@ app.post('/login', passport.authenticate('local', {
 
 app.get('/dashboard/login', function(req, res, next) {
     res.render('login');
+    /* db.user.create({firstname: 'Tess', lastname: 'McTest', email: 'test@mail.com', password: 'mypw', budget: 200})
+        .then(function(user) {
+            console.log(user);
+        }) */
 });
 app.post('dashboard/login', function(req, res){
     if(!req.body.id || !req.body.password){
@@ -93,6 +143,26 @@ app.post('dashboard/login', function(req, res){
        res.redirect('/protected_page');
     }
  });
+
+//***********Google log-in route***********
+app.get('/auth/google', passport.authenticate('google', {
+    scope: ['profile', 'email']
+    }
+    
+));
+
+//***********Google callback URL***********
+app.get('/auth/google/callback', 
+passport.authenticate('google', {failureRedirect: '/login'}),
+    (req, res) => {
+        console.log(req.body)
+        return res.redirect("/bills")
+    }
+)
+
+
+
+
 //route for logout
 app.get('logout', function(req, res, next) {
     req.session.destroy(function() {
@@ -103,8 +173,19 @@ app.get('logout', function(req, res, next) {
 
 
 //route for bills
-app.post('/bills', function(req, res, next) {
+/* app.post('/bills', function(req, res, next) {
     res.render('bills');
+}); */
+
+app.get('/bills', function(req, res, next) {
+    console.log(req.user)
+    res.render('bills', {
+        name: req.user.firstname
+    });
+    // console.log(req.user.emails[0].value);
+    /* console.log(req.sessionID);
+    console.log(req.session); */
+     //console.log(req.user.firstname)
 });
 
 //route for expenses
@@ -123,24 +204,6 @@ app.get('/user/:id', function(req, res, next) {
 
 
 
-app.post('/api/createuser', (req, res) => {
-    // Take in request params and create new user, return response
-    console.log(req.body);
-    const user = req.body;
-    const password = req.body.password;
-    bcrypt.hash(password, 10)
-        .then((hash) => {
-            user.password = hash;
-            db.user.create(user)
-                .then((results) => {
-                    res.json(results);
-                })
-                .catch((err) => {
-                    console.error(err);
-                })
-        })
-})
-
 app.listen(PORT, function(){
     console.log(`'This server is listening on ${PORT}..'`)
-})
+});
