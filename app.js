@@ -89,8 +89,8 @@ app.post('/register', async (req, res) => {
     let { name, email, password } = req.body;
     
     const hashedPassword = await bcrypt.hash(password, 10);
-       pool.query(`INSERT INTO public.accounts (name, email, password) 
-       VALUES ($1, $2, $3)
+       pool.query(`INSERT INTO public.users (firstname, lastname, email, password) 
+       VALUES ($1, $2, $3, $4)
        RETURNING id, password`, [name, email, hashedPassword],  
        (err, results) => {
                if (err) {
@@ -121,10 +121,7 @@ app.post('/login', passport.authenticate('local', {
 
 app.get('/dashboard/login', function(req, res, next) {
     res.render('login');
-    /* db.user.create({firstname: 'Tess', lastname: 'McTest', email: 'test@mail.com', password: 'mypw', budget: 200})
-        .then(function(user) {
-            console.log(user);
-        }) */
+
 });
 app.post('dashboard/login', function(req, res){
     if(!req.body.id || !req.body.password){
@@ -151,7 +148,7 @@ app.get('/auth/google', passport.authenticate('google', {
     
 ));
 
-//***********Google callback URL***********
+//Google callback URL
 app.get('/auth/google/callback', 
 passport.authenticate('google', {failureRedirect: '/login'}),
     (req, res) => {
@@ -159,7 +156,7 @@ passport.authenticate('google', {failureRedirect: '/login'}),
         return res.redirect("/bills")
     }
 )
-
+//***********end Google routes***********
 
 
 
@@ -180,7 +177,8 @@ app.get('logout', function(req, res, next) {
 app.get('/bills', function(req, res, next) {
     console.log(req.user)
     res.render('bills', {
-        name: req.user.firstname
+        name: req.user.firstname,
+        budgetAmount: req.user.budget
     });
     // console.log(req.user.emails[0].value);
     /* console.log(req.sessionID);
