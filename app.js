@@ -189,11 +189,16 @@ app.get('/bills', function(req, res, next) {
 });
 
 //route for expenses
-app.post('/expenses', function(req, res, next) {
+app.get('/expenses', function(req, res, next) {
     res.render('expenses');
 });
 
 //route for displaying data
+app.get('/user/:id', function(req, res, next) {
+    res.send('user' + req.params.id);
+});
+
+
 
 // Route for registering users?
 
