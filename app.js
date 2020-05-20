@@ -15,7 +15,10 @@ PORT = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
-
+app.use(session({
+    secret: 'abcdefg',//process.env.SESSION_SECRET, 
+    resave: true, 
+    saveUninitialized: true }));
 
 //Begin Passport 
 const passport = require('passport');
@@ -24,33 +27,44 @@ const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://localhost:3005/auth/google/callback'
+    callbackURL: 'http://localhost:3000/auth/google/callback'
  },
  function(accessToken, refreshToken, profile, done) {
     console.log(profile.emails[0].value);
     console.log(profile.name.givenName);
     //return done(null, profile); 
      db.user.findOrCreate({  //This works as long as the user does not update their name on their Google account later on.. If their name changes, a new account is created...
-         where: {email: profile.emails[0].value, firstname: profile.name.givenName, lastname: profile.name.familyName}, function (err, user) {
-                return done(err,user);}  
-        });
-        return done(null, profile);
+         where: {email: profile.emails[0].value, firstname: profile.name.givenName, lastname: profile.name.familyName}})
+         .then(user => {
+             return done(null, user)
+         })
+         .catch(e => {
+             return done(e)
+         })
+         /* , function (err, user) {return done(err,user);}  
+        }); */
  } 
 ));
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(session({
-    secret: process.env.SESSION_SECRET, 
-    resave: true, 
-    saveUninitialized: true }));
+
+
 
 passport.serializeUser((user, done) => {
-    done(null, user);
+    //console.log(user);
+    done(null, user[0].id);
 });
 
 passport.deserializeUser((user, done) => {
-    done(null, user);
+    console.log('The user is ' + user);
+    db.user.findByPk(user)
+    .then(function(user){
+        done(null, user);
+    })
+    .catch(e => {
+        return done(e)
+    })
 });
 //END Passport Code
 
@@ -134,12 +148,14 @@ app.post('dashboard/login', function(req, res){
 app.get('/auth/google', passport.authenticate('google', {
     scope: ['profile', 'email']
     }
+    
 ));
 
 //***********Google callback URL***********
 app.get('/auth/google/callback', 
 passport.authenticate('google', {failureRedirect: '/login'}),
     (req, res) => {
+        console.log(req.body)
         return res.redirect("/bills")
     }
 )
@@ -157,17 +173,19 @@ app.get('logout', function(req, res, next) {
 
 
 //route for bills
-app.post('/bills', function(req, res, next) {
+/* app.post('/bills', function(req, res, next) {
     res.render('bills');
-});
+}); */
 
 app.get('/bills', function(req, res, next) {
+    console.log(req.user)
     res.render('bills', {
-        name: req.user.displayName
+        name: req.user.firstname
     });
     // console.log(req.user.emails[0].value);
     /* console.log(req.sessionID);
     console.log(req.session); */
+     //console.log(req.user.firstname)
 });
 
 //route for expenses
