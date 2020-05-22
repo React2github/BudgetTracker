@@ -26,7 +26,7 @@ const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: 'http://localhost:3000/auth/google/callback'
  },
  function(accessToken, refreshToken, profile, done) {
@@ -204,4 +204,16 @@ app.get('/user/:id', function(req, res, next) {
 
 app.listen(PORT, function(){
     console.log(`'This server is listening on ${PORT}..'`)
+});
+
+// Route to view expenses
+
+app.get('/index', function(req, res, next) {
+    res.render('index.ejs')
+});
+
+// Route to view bills
+
+app.get('/bills', function(req, res, next) {
+    res.render('bills.ejs')
 });

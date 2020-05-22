@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BudgetTracker</title>
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="/index" />
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -13,6 +13,7 @@
     />
     <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+
   </head>
   <body>
     <!--HEADER CONTENT-->
@@ -23,7 +24,7 @@
       </div>
 
       <div class="button">
-        <button type="button" class="btn btn-dark" href="login.html">Logout</button>
+        <button type="button" class="btn btn-dark" href="/login">Logout</button>
       </div>
     </div>
     <div class="greeting">
@@ -36,7 +37,7 @@
       <h3>Your Monthly Bills</h3>
       <ul class="nav justify-content-end">
         <li class="nav-item">
-          <a class="nav-link active" href="index.html">View Weekly Expenses</a>
+          <a class="nav-link active" href="/index">View Weekly Expenses</a>
         </li>
     </div>
     
@@ -44,13 +45,11 @@
 <div class="expenses-container">
   <div class="expenses-chart">
       <!--RENDER MONTHLY BILLS CHART. CAN ADJUST THE ASPECT RATIO AS NEEDED-->
-      <div class="ct-chart ct-perfect-fourth"></div>
-      <a href="https://placeholder.com"><img src="https://via.placeholder.com/700"></a>
+      <div class="ct-chart ct-minor-sixth"></div>
   </div>
   
   <div class="expenses-list">
       <!--RENDER MONTHLY BILLS LIST-->
-      <a href="https://placeholder.com"><img src="https://via.placeholder.com/600"></a>
       
       <div class="dropdown">
           <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -67,9 +66,32 @@
   </div>
   </div>
     </body>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script> 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    
+    <script>
+    var data = {
+      labels: ['Bananas', 'Apples', 'Grapes'],
+      series: [20, 15, 40]
+    };
+    
+    var options = {
+      chartPadding: 30,
+      labelOffset: 50,
+      labelDirection: 'explode'
+    };
+    
+    // var responsiveOptions = [
+    //   [{
+    //     labelOffset: 100,
+    //     chartPadding: 20,
+    //     labelDirection: "explode"
+    //   }]
+    // ];
+    
+    new Chartist.Pie('.ct-chart', data, options);
+    </script> 
   
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script> 
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     </html>
   
