@@ -179,7 +179,7 @@ app.get('logout', function(req, res, next) {
 
 app.get('/bills', function(req, res, next) {
     console.log(req.user)
-    res.render('bills', {
+    res.render('bills-initial', {
         name: req.user.firstname,
         budgetAmount: req.user.budget
     });
@@ -190,9 +190,9 @@ app.get('/bills', function(req, res, next) {
 });
 
 //route for expenses
-app.get('/expenses', function(req, res, next) {
+/* app.get('/expenses', function(req, res, next) {
     res.render('expenses');
-});
+}); */
 
 //route for displaying data
 app.get('/user/:id', function(req, res, next) {
@@ -215,10 +215,25 @@ app.get('/index', function(req, res, next) {
     res.render('index.ejs')
 });
 
+// Route to display existing expenses
+
+app.get('/expenses', function(req, res, next) {
+    let { gas, groceries, dining, other } = 0;
+    db.expenses.findByPk(req.user.id)
+        .then((results) => {
+            res.render('bills.ejs', {
+                gas: results.gas,
+                groceries: results.groceries,
+                dining: results.dining,
+                other: results.other
+            })
+        })
+})
+
 // Route to view bills
 
 app.get('/bills', function(req, res, next) {
-    res.render('bills.ejs')
+    res.render('bills-initial')
 });
 
 
