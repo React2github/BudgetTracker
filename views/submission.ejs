@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BudgetTracker</title>
+    <link rel="stylesheet" href="/index" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+
+  </head>
+  <body>
+    <!--HEADER CONTENT-->
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">BudgetTracker</h1>
+        
+      </div>
+
+      <div class="button">
+        <button type="button" class="btn btn-dark" href="/login">Logout</button>
+      </div>
+    </div>
+    <div class="greeting">
+      <!--USER FIELD WILL POPULATE WITH INFO FROM DATABASE.-->
+      <h2>Hello, <%=name %>!</h2>
+    </div>
+
+    <div class="expenses">
+      <h2>Your budget is <%=budgetAmount %> </h2>
+      <h3>Your Monthly Bills</h3>
+      <ul class="nav justify-content-end">
+        <li class="nav-item">
+          <a class="nav-link active" href="/index">View Weekly Expenses</a>
+        </li>
+    </div>
+    
+
+<div class="expenses-container">
+  <div class="expenses-chart">
+      <!--RENDER MONTHLY BILLS CHART. CAN ADJUST THE ASPECT RATIO AS NEEDED-->
+      <div class="ct-chart ct-minor-sixth"></div>
+  </div>
+  
+  <div class="expenses-list">
+      <!--RENDER MONTHLY BILLS LIST-->
+      
+      <div class="dropdown">
+          <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Add a Bill
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Rent/Mortgage</a>
+            <a class="dropdown-item" href="#">Water</a>
+            <a class="dropdown-item" href="#">Electricity/Gas</a>
+            <a class="dropdown-item" href="#">Car</a>
+            <a class="dropdown-item" href="#">Other</a>
+          </div>
+        </div>
+  </div>
+  </div>
+    </body>
+    
+    
+  
+    
+  
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script> 
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    </html>
+  

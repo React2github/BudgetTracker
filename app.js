@@ -176,17 +176,38 @@ app.get('logout', function(req, res, next) {
 /* app.post('/bills', function(req, res, next) {
     res.render('bills');
 }); */
+app.get('/submission', function(req, res) {
+    res.render('submission', {
+        name: req.user.firstname,
+        budgetAmount: req.user.budget
+                 
+    })
+})
+
 
 app.get('/bills', function(req, res, next) {
     console.log(req.user)
-    res.render('bills-initial', {
-        name: req.user.firstname,
-        budgetAmount: req.user.budget
-    });
-    // console.log(req.user.emails[0].value);
-    /* console.log(req.sessionID);
-    console.log(req.session); */
-     //console.log(req.user.firstname)
+    db.expenses.findOne({
+        where: {
+            userId: req.user.id
+        }
+    }).then(function(results){
+        console.log(results)
+        if(results == null){
+            res.redirect('/submission')
+        }else{
+            res.render('bills', {
+                 name: req.user.firstname,
+                 budgetAmount: req.user.budget
+              });
+        }
+
+    })
+   // res.render('bills', {
+     //  name: req.user.firstname,
+       // budgetAmount: req.user.budget
+   // });
+    
 });
 
 //route for expenses
