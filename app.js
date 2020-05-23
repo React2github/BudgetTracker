@@ -19,6 +19,8 @@ app.use(session({
     secret: 'abcdefg',//process.env.SESSION_SECRET, 
     resave: true, 
     saveUninitialized: true }));
+app.use(bodyParser.urlencoded({ extended: true })); 
+
 
 //Begin Passport 
 const passport = require('passport');
@@ -87,10 +89,11 @@ app.get('/register', (req, res) => {
 
 app.post('/register', async (req, res) => {
     let { name, email, password } = req.body;
+    console.log( [name ])
     
     const hashedPassword = await bcrypt.hash(password, 10);
-       pool.query(`INSERT INTO public.users (firstname, lastname, email, password) 
-       VALUES ($1, $2, $3, $4)
+       pool.query(`INSERT INTO public.users (name, email, password) 
+       VALUES ($1, $2, $3)
        RETURNING id, password`, [name, email, hashedPassword],  
        (err, results) => {
                if (err) {
@@ -119,27 +122,27 @@ app.post('/login', passport.authenticate('local', {
 //route for logins 
 // (Do we need this? - Ab) 
 
-app.get('/dashboard/login', function(req, res, next) {
-    res.render('login');
+// app.get('/dashboard/login', function(req, res, next) {
+//     res.render('login');
 
-});
-app.post('dashboard/login', function(req, res){
-    if(!req.body.id || !req.body.password){
-       res.status("400");
-       res.send("Invalid details!");
-    } else {
-       Users.filter(function(user){
-          if(user.id === req.body.id){
-             res.render('login', {
-                message: "User Already Exists! Login or choose another user id"});
-          }
-       });
-       var newUser = {id: req.body.id, password: req.body.password};
-       Users.push(newUser);
-       req.session.user = newUser;
-       res.redirect('/protected_page');
-    }
- });
+// });
+// app.post('dashboard/login', function(req, res){
+//     if(!req.body.id || !req.body.password){
+//        res.status("400");
+//        res.send("Invalid details!");
+//     } else {
+//        Users.filter(function(user){
+//           if(user.id === req.body.id){
+//              res.render('login', {
+//                 message: "User Already Exists! Login or choose another user id"});
+//           }
+//        });
+//        var newUser = {id: req.body.id, password: req.body.password};
+//        Users.push(newUser);
+//        req.session.user = newUser;
+//        res.redirect('/protected_page');
+//     }
+//  });
 
 //***********Google log-in route***********
 app.get('/auth/google', passport.authenticate('google', {
@@ -208,9 +211,9 @@ app.get('/bills', function(req, res, next) {
 });
 
 //route for expenses
-app.get('/expenses', function(req, res, next) {
+/* app.get('/expenses', function(req, res, next) {
     res.render('expenses');
-});
+}); */
 
 //route for displaying data
 app.get('/user/:id', function(req, res, next) {
@@ -233,8 +236,47 @@ app.get('/index', function(req, res, next) {
     res.render('index.ejs')
 });
 
+// Route to display existing expenses
+
+app.get('/expenses', function(req, res, next) {
+    let { gas, groceries, dining, other } = 0;
+    db.expenses.findByPk(req.user.id)
+        .then((results) => {
+            res.render('bills.ejs', {
+                gas: results.gas,
+                groceries: results.groceries,
+                dining: results.dining,
+                other: results.other
+            })
+        })
+})
+
 // Route to view bills
 
 app.get('/bills', function(req, res, next) {
-    res.render('bills.ejs')
+    res.render('bills-initial')
 });
+
+
+// Routes to submit data
+app.post('/submitExpense', function(req, res, next) {
+    console.log(req.body)
+    console.log(req.user.id)
+    let updateColumn = req.body.expenses;
+    let newAmount = parseInt(req.body.amount);
+        if (updateColumn == 'dining') {
+            db.expenses.findOrCreate({where: {userId:req.user.id}})
+            .then(user => {
+                db.expenses.update(
+                    {dining: newAmount},
+                    {where: {userId: req.user.id}}
+                )})
+                }})
+                //return done(null, user)
+            //})
+
+
+
+        // db.expenses.findOrCreate(
+        //{dining: parseInt(req.body.amount)},
+        //{where: {userId: req.user.id}}
