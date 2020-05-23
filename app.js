@@ -19,6 +19,8 @@ app.use(session({
     secret: 'abcdefg',//process.env.SESSION_SECRET, 
     resave: true, 
     saveUninitialized: true }));
+app.use(bodyParser.urlencoded({ extended: true })); 
+
 
 //Begin Passport 
 const passport = require('passport');
@@ -218,3 +220,27 @@ app.get('/index', function(req, res, next) {
 app.get('/bills', function(req, res, next) {
     res.render('bills.ejs')
 });
+
+
+// Routes to submit data
+app.post('/submitExpense', function(req, res, next) {
+    console.log(req.body)
+    console.log(req.user.id)
+    let updateColumn = req.body.expenses;
+    let newAmount = parseInt(req.body.amount);
+        if (updateColumn == 'dining') {
+            db.expenses.findOrCreate({where: {userId:req.user.id}})
+            .then(user => {
+                db.expenses.update(
+                    {dining: newAmount},
+                    {where: {userId: req.user.id}}
+                )})
+                }})
+                //return done(null, user)
+            //})
+
+
+
+        // db.expenses.findOrCreate(
+        //{dining: parseInt(req.body.amount)},
+        //{where: {userId: req.user.id}}
