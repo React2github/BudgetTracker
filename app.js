@@ -87,10 +87,11 @@ app.get('/register', (req, res) => {
 
 app.post('/register', async (req, res) => {
     let { name, email, password } = req.body;
+    console.log( [name ])
     
     const hashedPassword = await bcrypt.hash(password, 10);
-       pool.query(`INSERT INTO public.users (firstname, lastname, email, password) 
-       VALUES ($1, $2, $3, $4)
+       pool.query(`INSERT INTO public.users (name, email, password) 
+       VALUES ($1, $2, $3)
        RETURNING id, password`, [name, email, hashedPassword],  
        (err, results) => {
                if (err) {
@@ -119,27 +120,27 @@ app.post('/login', passport.authenticate('local', {
 //route for logins 
 // (Do we need this? - Ab) 
 
-app.get('/dashboard/login', function(req, res, next) {
-    res.render('login');
+// app.get('/dashboard/login', function(req, res, next) {
+//     res.render('login');
 
-});
-app.post('dashboard/login', function(req, res){
-    if(!req.body.id || !req.body.password){
-       res.status("400");
-       res.send("Invalid details!");
-    } else {
-       Users.filter(function(user){
-          if(user.id === req.body.id){
-             res.render('login', {
-                message: "User Already Exists! Login or choose another user id"});
-          }
-       });
-       var newUser = {id: req.body.id, password: req.body.password};
-       Users.push(newUser);
-       req.session.user = newUser;
-       res.redirect('/protected_page');
-    }
- });
+// });
+// app.post('dashboard/login', function(req, res){
+//     if(!req.body.id || !req.body.password){
+//        res.status("400");
+//        res.send("Invalid details!");
+//     } else {
+//        Users.filter(function(user){
+//           if(user.id === req.body.id){
+//              res.render('login', {
+//                 message: "User Already Exists! Login or choose another user id"});
+//           }
+//        });
+//        var newUser = {id: req.body.id, password: req.body.password};
+//        Users.push(newUser);
+//        req.session.user = newUser;
+//        res.redirect('/protected_page');
+//     }
+//  });
 
 //***********Google log-in route***********
 app.get('/auth/google', passport.authenticate('google', {
