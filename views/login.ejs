@@ -7,30 +7,25 @@
           <h1 class="display-4">BudgetTracker</h1>
         </div>
     </div>
-    <div class="containers">
-        <div class="centered">
-        <form class="login-form">
+    <div class="container" style="background-color:#f1f1f1">
+        <form action="/login" method="POST">
             <div class='login-input'>
                 <label for='email'><b>Email</b></label>
                 <input type='email' placeholder="Enter Email" id='email' name='email' 
                 required>
             </div>
-        <div class="login-input">
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" id='password' name="password" required>
-        </div>
-        <div class="login-input">
-            <button type="submit">Login</button>
-            <label>
-            <input type="checkbox" checked="blank" name="remember"> Remember me
-            </label>
-            <h4 class="psw"><a href="/register">Create User</a></h4><h4><a href="/auth/google">Log-in with Google</a></h4>
-        </div>
+            <div class="login-input">
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="password" required>
+            </div>
+            <div class="login-input">
+                <button type="submit">Login</button>
+                <!-- <label>
+                <input type="checkbox" checked="blank" name="remember"> Remember me -->
+                <!-- </label> -->
+                <h4 class="psw"><a href="/register">Create User</a></h4><h4><a href="/auth/google">Log-in with Google</a></h4>
+            </div>
         </form>
-        </div>
-    <div id="login-error-msg-holder">
-        <p id="login-error-msg">Invalid username <span id="error-msg-second-line">and/or password</span></p>
-    </div>
     </div>
 </body>
 </html>

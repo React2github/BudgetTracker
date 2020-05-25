@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create a User</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
-    <link rel="stylesheet" href="register.css" />
-</head>
+    <%- include("partials/header3.ejs") %> 
 <body>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
@@ -14,11 +8,10 @@
         </div>
       </div>
     <div class="containers">
-<<<<<<< HEAD
         <form action="/register" method="POST">
             <div class="login-input">
                 <label for="name"><b>Name</b></label>
-                <input type="text" placeholder="Enter Name" name="name" required>
+                <input type="text" placeholder="Enter Name" name="firstname" required>
             </div>
             <div class="login-input">
                 <label for="password"><b>Password</b></label>
@@ -32,7 +25,6 @@
                 <button type="submit" value="submit"></a>Register</button>
                 <h4 class="psw"><a href="/login">Login</a></h4>
             </div>
-=======
         <form>
         <div class="login-input">
             <label for="uname"><b>User</b></label>
@@ -50,7 +42,6 @@
             <button type="submit"></a>Register</button>
             <h4 class="psw"><a href="/login">Login</a></h4>
         </div>
->>>>>>> User-login
         </form>
     </div>
 </body>
