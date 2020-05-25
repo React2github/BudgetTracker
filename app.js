@@ -5,6 +5,7 @@ if(process.env.Node_ENV !== 'production') {
 const express = require('express');
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
+const methodOverride = require('method-override');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
 const db = require('./models');
@@ -19,6 +20,7 @@ app.use(session({
     resave: true, 
     saveUninitialized: true }));
 app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(methodOverride('_method'))
 
 
 //Begin Passport 
@@ -166,12 +168,11 @@ passport.authenticate('google', {failureRedirect: '/login'}),
 
 
 //route for logout
-app.get('logout', function(req, res, next) {
-    req.session.destroy(function() {
-        console.log("You are now logged out.")
-    })
-    res.redirect('/login');
-});
+app.delete('/logout', (req, res) => {
+    console.log("something went wrong")
+    req.logOut()
+    res.redirect('/login')
+})
 
 
 //route for bills
