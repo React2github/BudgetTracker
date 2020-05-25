@@ -97,7 +97,7 @@ app.post('/register', async (req, res) => {
        RETURNING id, password`, [name, email, hashedPassword],  
        (err, results) => {
                if (err) {
-                throw err;
+                loginErrorMsg.style.opacity = 1;
                }
                req.flash('success_msg', "You are now registered. Please log in");
                res.redirect('/login');
