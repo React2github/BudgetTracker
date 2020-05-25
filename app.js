@@ -196,10 +196,18 @@ app.get('/bills', function(req, res, next) {
         if(results == null){
             res.redirect('/submission')
         }else{
-            res.render('bills', {
-                 name: req.user.firstname,
-                 budgetAmount: req.user.budget
-              });
+            let { gas, groceries, dining, other } = 0;
+            db.expenses.findByPk(req.user.id)
+                .then((results) => {
+                    res.render('bills.ejs', {
+                        name: req.user.firstname,
+                        budgetAmount: req.user.budget,
+                        gas: results.gas,
+                        groceries: results.groceries,
+                        dining: results.dining,
+                        other: results.other
+                    })
+                })
         }
 
     })
@@ -253,9 +261,9 @@ app.get('/expenses', function(req, res, next) {
 
 // Route to view bills
 
-app.get('/bills', function(req, res, next) {
+/* app.get('/bills', function(req, res, next) {
     res.render('bills-initial')
-});
+}); */
 
 // Routes to submit data
 app.post('/submitExpense', function(req, res, next) {
