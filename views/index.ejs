@@ -7,10 +7,9 @@
       <div class="container">
         <h1 class="display-4">BudgetTracker</h1>
       </div>
-
-      <div class="button">
-        <button type="button" class="btn btn-dark" href="/login">Logout</button>
-      </div>
+      <form action='/logout?_method=DELETE' method='POST' class='main'>
+        <button type='submit' class="btn btn-dark">LogOut</button>
+        </form>
     </div>
     <div class="greeting">
       <!--USER FIELD WILL POPULATE WITH INFO FROM DATABASE.-->
