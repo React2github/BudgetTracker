@@ -8,23 +8,23 @@
         </div>
       </div>
     <div class="containers">
-        <form>
-        <div class="login-input">
-            <label for="uname"><b>User</b></label>
-            <input type="text" placeholder="Enter User" name="uname" required>
-        </div>
-        <div class="login-input">
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" required>
-        </div>
-        <div class="login-input">
-            <label for="uname"><b>Email</b></label>
-            <input type="text" placeholder="Enter Email" name="psw" required>
-        </div>
-        <div class="login-input">
-            <button type="submit"></a>Register</button>
-            <h4 class="psw"><a href="/login">Login</a></h4>
-        </div>
+        <form action="/register" method="POST">
+            <div class="login-input">
+                <label for="name"><b>Name</b></label>
+                <input type="text" placeholder="Enter Name" name="name" required>
+            </div>
+            <div class="login-input">
+                <label for="password"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="password" required>
+            </div>
+            <div class="login-input">
+                <label for="email"><b>Email</b></label>
+                <input type="email" placeholder="Enter Email" name="email" required>
+            </div>
+            <div class="login-input">
+                <button type="submit" value="submit"></a>Register</button>
+                <h4 class="psw"><a href="/login">Login</a></h4>
+            </div>
         </form>
     </div>
 </body>
