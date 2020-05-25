@@ -257,7 +257,6 @@ app.get('/bills', function(req, res, next) {
     res.render('bills-initial')
 });
 
-
 // Routes to submit data
 app.post('/submitExpense', function(req, res, next) {
     console.log(req.body)
@@ -268,15 +267,85 @@ app.post('/submitExpense', function(req, res, next) {
             db.expenses.findOrCreate({where: {userId:req.user.id}})
             .then(user => {
                 db.expenses.update(
-                    {dining: newAmount},
-                    {where: {userId: req.user.id}}
-                )})
-                }})
-                //return done(null, user)
-            //})
+                    { dining: newAmount },
+                    { where: { userId: req.user.id }}
+                ).then(() => { res.redirect("/submission") })})
+        } else if (updateColumn == 'gas') {
+            db.expenses.findOrCreate({where: {userId:req.user.id}})
+            .then(user => {
+                db.expenses.update(
+                    { gas: newAmount },
+                    { where: { userId: req.user.id }}
+                ).then(() => { res.send("Success") })})
+        } else if (updateColumn == 'groceries') {
+            db.expenses.findOrCreate({where: {userId:req.user.id}})
+            .then(user => {
+                db.expenses.update(
+                    { groceries: newAmount },
+                    { where: { userId: req.user.id }}
+                ).then(() => { res.send("Success") })})
+        } else if (updateColumn == 'other') {
+            db.expenses.findOrCreate({where: {userId:req.user.id}})
+            .then(user => {
+                db.expenses.update(
+                    { other: newAmount },
+                    { where: { userId: req.user.id }}
+                ).then(() => { res.send("Success") })})
+        }})
+        
 
-
-
-        // db.expenses.findOrCreate(
-        //{dining: parseInt(req.body.amount)},
-        //{where: {userId: req.user.id}}
+app.post('/submitBill', function(req, res, next) {
+    let updateColumn = req.body.bills;
+    let newAmount = parseInt(req.body.amount);
+    if (updateColumn == 'water') {
+        db.bills.findOrCreate({
+            where: { userId: req.user.id}
+        })
+        .then(user => {
+            db.bills.update(
+                { water: newAmount },
+                { where: { userId: req.user.id }}
+            ).then(() => { res.send("Success") })
+        })
+    } else if (updateColumn == 'rent_mort') {
+        db.bills.findOrCreate({
+            where: { userId: req.user.id}
+        })
+        .then(user => {
+            db.bills.update(
+                { rent_mort: newAmount },
+                { where: { userId: req.user.id }}
+            ).then(() => { res.send("Success") })
+        })
+    } else if (updateColumn == 'electricity') {
+        db.bills.findOrCreate({
+            where: { userId: req.user.id}
+        })
+        .then(user => {
+            db.bills.update(
+                { electricity: newAmount },
+                { where: { userId: req.user.id }}
+            ).then(() => { res.send("Success") })
+        })
+    } else if (updateColumn == 'gas') {
+        db.bills.findOrCreate({
+            where: { userId: req.user.id}
+        })
+        .then(user => {
+            db.bills.update(
+                { gas: newAmount },
+                { where: { userId: req.user.id }}
+            ).then(() => { res.send("Success") })
+        })
+    } else if (updateColumn == 'other') {
+        db.bills.findOrCreate({
+            where: { userId: req.user.id}
+        })
+        .then(user => {
+            db.bills.update(
+                { other: newAmount },
+                { where: { userId: req.user.id }}
+            ).then(() => { res.send("Success") })
+        })
+    }
+})

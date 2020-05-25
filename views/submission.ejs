@@ -35,35 +35,120 @@
     <div class="expenses">
       <h2>Your budget is <%=budgetAmount %> </h2>
       <h3>Your Monthly Bills</h3>
-      <ul class="nav justify-content-end">
-        <li class="nav-item">
-          <a class="nav-link active" href="/index">View Weekly Expenses</a>
-        </li>
+      <div class="expenses-container">
+        <div class="expenses-chart">
+            <!--RENDER MONTHLY BILLS CHART. CAN ADJUST THE ASPECT RATIO AS NEEDED-->
+            <div class="ct-chart ct-minor-sixth"></div>
+        </div>
+        <div id="billsForm">
+          <form action="/submitBill" method="POST">
+            <div class="form-group row">
+              <label for="amount" class="col-sm-2 col-form-label">Amount</label>
+              <div class="col-sm-10">
+                <input type="integer" class="form-control" id="amount">
+              </div>
+            </div>
+            <fieldset class="form-group">
+              <div class="row">
+                <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
+                <div class="col-sm-10">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bills" id="rent_mortBill" value="rent_mort" checked>
+                    <label class="form-check-label" for="rent_mortBill">
+                      Rent/Mortgage
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bills" id="waterBill" value="water">
+                    <label class="form-check-label" for="waterBill">
+                      Water
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bills" id="electricityBill" value="electricity">
+                    <label class="form-check-label" for="electricityBill">
+                      Electricity
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bills" id="gasBill" value="gas">
+                    <label class="form-check-label" for="gasBill">
+                      Gas
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bills" id="carBill" value="car">
+                    <label class="form-check-label" for="carBill">
+                      Car
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="bills" id="otherBill" value="other">
+                    <label class="form-check-label" for="otherBill">
+                      Other
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            <div class="form-group row">
+              <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary" formmethod="POST">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div id="expenseForm">
+          <form action="/submitExpense" method="POST">
+            <div class="form-group row">
+              <label for="amount" class="col-sm-2 col-form-label">Amount</label>
+              <div class="col-sm-10">
+                <input type="integer" class="form-control" id="amount" name="amount">
+              </div>
+            </div>
+            <fieldset class="form-group">
+              <div class="row">
+                <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
+                <div class="col-sm-10">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="expenses" id="gasExpense" value="gas" checked>
+                    <label class="form-check-label" for="gasExpense">
+                      Gas
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="expenses" id="groceryExpense" value="groceries">
+                    <label class="form-check-label" for="groceryExpense">
+                      Groceries
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="expenses" id="diningExpense" value="dining">
+                    <label class="form-check-label" for="diningExpense">
+                      Dining Out
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="expenses" id="otherExpense" value="other">
+                    <label class="form-check-label" for="otherExpense">
+                      Other
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            <div class="form-group row">
+              <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary" formmethod="POST">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
     
 
-<div class="expenses-container">
-  <div class="expenses-chart">
-      <!--RENDER MONTHLY BILLS CHART. CAN ADJUST THE ASPECT RATIO AS NEEDED-->
-      <div class="ct-chart ct-minor-sixth"></div>
-  </div>
-  
-  <div class="expenses-list">
-      <!--RENDER MONTHLY BILLS LIST-->
-      
-      <div class="dropdown">
-          <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Add a Bill
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Rent/Mortgage</a>
-            <a class="dropdown-item" href="#">Water</a>
-            <a class="dropdown-item" href="#">Electricity/Gas</a>
-            <a class="dropdown-item" href="#">Car</a>
-            <a class="dropdown-item" href="#">Other</a>
-          </div>
-        </div>
-  </div>
+
   </div>
     </body>
     
