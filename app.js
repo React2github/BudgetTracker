@@ -192,6 +192,17 @@ app.get('/bills', function(req, res, next) {
     
 });
 
+//route for submit budget
+app.post('/submitBudget', function (req, res) {
+    console.log(req.body.budget)
+    let setBudget = parseInt(req.body.budget);
+    db.user.update(
+        {budget: setBudget },
+        {where: {id: req.user.id}})
+        .then(() => res.redirect("/submission"))
+    })
+
+
 //route for expenses
 /* app.get('/expenses', function(req, res, next) {
     res.render('expenses');
