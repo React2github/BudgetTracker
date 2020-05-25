@@ -130,7 +130,7 @@ app.get('/auth/google/callback',
 passport.authenticate('google', {failureRedirect: '/login'}),
     (req, res) => {
         console.log(req.body)
-        return res.redirect("/bills")
+        return res.redirect("/submission")
     }
 )
 //***********end Google routes***********
@@ -170,9 +170,15 @@ app.get('/bills', function(req, res, next) {
         if(results == null){
             res.redirect('/submission')
         }else{
-            let { gas, groceries, dining, other } = 0;
-            db.expenses.findByPk(req.user.id)
-                .then((results) => {
+            //let { gas, groceries, dining, other } = 0;
+            //db.expenses.findByPk(req.user.id)
+            db.expenses.findOne({
+                where: {
+                    userId: req.user.id
+                }
+            }).then((results) => {
+                    console.log(req.user.id)
+                    console.log('This is bills ' + results)
                     res.render('bills.ejs', {
                         name: req.user.firstname,
                         budgetAmount: req.user.budget,
@@ -191,6 +197,17 @@ app.get('/bills', function(req, res, next) {
    // });
     
 });
+
+//route for submit budget
+app.post('/submitBudget', function (req, res) {
+    console.log(req.body.budget)
+    let setBudget = parseInt(req.body.budget);
+    db.user.update(
+        {budget: setBudget },
+        {where: {id: req.user.id}})
+        .then(() => res.redirect("/submission"))
+    })
+
 
 //route for expenses
 /* app.get('/expenses', function(req, res, next) {
@@ -222,8 +239,10 @@ app.get('/index', function(req, res, next) {
 
 app.get('/expenses', function(req, res, next) {
     let { gas, groceries, dining, other } = 0;
+   
     db.expenses.findByPk(req.user.id)
         .then((results) => {
+            console.log(results)
             res.render('bills.ejs', {
                 gas: results.gas,
                 groceries: results.groceries,
