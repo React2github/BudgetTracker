@@ -8,7 +8,6 @@ const flash = require('express-flash');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
 const db = require('./models');
-const { pool } = require('./dbConfig');
 const app = express();
 PORT = process.env.PORT || 3000;
 
@@ -25,6 +24,42 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //Begin Passport 
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const LocalStrategy = require('passport-local').Strategy;
+
+
+// Begin local strategy 
+
+passport.use(
+	new LocalStrategy(
+		{
+			usernameField: 'email',
+		},
+		function (email, password, done) {
+			db.user
+				.findOne({ where: { email } })
+				.then((user) => {
+					if (user) {
+						//If the user if found with that email, we run the password provided through bcrypt.
+						bcrypt.compare(password, user.password).then((res) => {
+							if (res) {
+                                
+								return done(null, user);
+							} else {
+								return done(null, false, { message: 'Incorrect password.' });
+							}
+						});
+					}
+					if (!user) {
+						return done(null, false, { message: 'Incorrect details.' });
+					}
+				})
+				.catch((err) => done(err));
+		}
+	)
+);
+
+
+// Begin Google Strategy 
 
 passport.use(new GoogleStrategy({
  clientID: process.env.GOOGLE_CLIENT_ID,
@@ -55,6 +90,7 @@ app.use(passport.session());
 
 passport.serializeUser((user, done) => {
     //console.log(user);
+    let localUser = [user]
     done(null, user[0].id);
 });
 
@@ -88,21 +124,13 @@ app.get('/register', (req, res) => {
 })
 
 app.post('/register', async (req, res) => {
-    let { name, email, password } = req.body;
-    console.log( [name ])
+    let { firstname, email, password } = req.body;
     
-    const hashedPassword = await bcrypt.hash(password, 10);
-       pool.query(`INSERT INTO public.users (name, email, password) 
-       VALUES ($1, $2, $3)
-       RETURNING id, password`, [name, email, hashedPassword],  
-       (err, results) => {
-               if (err) {
-                throw err;
-               }
-               req.flash('success_msg', "You are now registered. Please log in");
-               res.redirect('/login');
-           })
-       
+    bcrypt.hash(password, 10)
+    .then(function (hash) {
+        db.user.create({firstname:firstname, email:email, password: hash})
+        .then( res.redirect('/login'))
+    })  
         });
        
 
@@ -113,9 +141,9 @@ app.get('/login', (req, res) => {
 })
 
 app.post('/login', passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true
+    successRedirect: '/bills',
+    failureRedirect: '/register',
+    failureFlash: "Login failed"
 })); 
 
 //***********Google log-in route***********

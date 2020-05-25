@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class="container" style="background-color:#f1f1f1">
-        <form>
+        <form action="/login" method="POST">
             <div class='login-input'>
                 <label for='email'><b>Email</b></label>
                 <input type='email' id='email' name='email' 
@@ -26,9 +26,9 @@
             </div>
             <div class="login-input">
                 <button type="submit">Login</button>
-                <label>
-                <input type="checkbox" checked="blank" name="remember"> Remember me
-                </label>
+                <!-- <label>
+                <input type="checkbox" checked="blank" name="remember"> Remember me -->
+                <!-- </label> -->
                 <h4 class="psw"><a href="/register">Create User</a></h4><h4><a href="/auth/google">Log-in with Google</a></h4>
             </div>
         </form>
