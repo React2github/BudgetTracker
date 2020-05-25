@@ -196,6 +196,7 @@ app.get('/bills', checkAuthenticated, function(req, res, next) {
     }).then(function(results){
         console.log(results)
         if(results == null){
+            alert("You haven't entered any data")
             res.redirect('/submission')
         }else{
             //let { gas, groceries, dining, other } = 0;
