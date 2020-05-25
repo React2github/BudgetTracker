@@ -8,7 +8,6 @@ const flash = require('express-flash');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
 const db = require('./models');
-const { pool } = require('./dbConfig');
 const app = express();
 PORT = process.env.PORT || 3000;
 
@@ -19,13 +18,51 @@ app.use(session({
     secret: 'abcdefg',//process.env.SESSION_SECRET, 
     resave: true, 
     saveUninitialized: true }));
+app.use(bodyParser.urlencoded({ extended: true })); 
+
 
 //Begin Passport 
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const LocalStrategy = require('passport-local').Strategy;
+
+
+// Begin local strategy 
+
+passport.use(
+	new LocalStrategy(
+		{
+			usernameField: 'email',
+		},
+		function (email, password, done) {
+			db.user
+				.findOne({ where: { email } })
+				.then((user) => {
+					if (user) {
+						//If the user if found with that email, we run the password provided through bcrypt.
+						bcrypt.compare(password, user.password).then((res) => {
+							if (res) {
+                                
+								return done(null, user);
+							} else {
+								return done(null, false, { message: 'Incorrect password.' });
+							}
+						});
+					}
+					if (!user) {
+						return done(null, false, { message: 'Incorrect details.' });
+					}
+				})
+				.catch((err) => done(err));
+		}
+	)
+);
+
+
+// Begin Google Strategy 
 
 passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
+ clientID: process.env.GOOGLE_CLIENT_ID,
    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: 'http://localhost:3000/auth/google/callback'
  },
@@ -53,6 +90,7 @@ app.use(passport.session());
 
 passport.serializeUser((user, done) => {
     //console.log(user);
+    let localUser = [user]
     done(null, user[0].id);
 });
 
@@ -86,20 +124,13 @@ app.get('/register', (req, res) => {
 })
 
 app.post('/register', async (req, res) => {
-    let { name, email, password } = req.body;
+    let { firstname, email, password } = req.body;
     
-    const hashedPassword = await bcrypt.hash(password, 10);
-       pool.query(`INSERT INTO public.users (firstname, lastname, email, password) 
-       VALUES ($1, $2, $3, $4)
-       RETURNING id, password`, [name, email, hashedPassword],  
-       (err, results) => {
-               if (err) {
-                loginErrorMsg.style.opacity = 1;
-               }
-               req.flash('success_msg', "You are now registered. Please log in");
-               res.redirect('/login');
-           })
-       
+    bcrypt.hash(password, 10)
+    .then(function (hash) {
+        db.user.create({firstname:firstname, email:email, password: hash})
+        .then( res.redirect('/login'))
+    })  
         });
        
 
@@ -110,36 +141,10 @@ app.get('/login', (req, res) => {
 })
 
 app.post('/login', passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true
+    successRedirect: '/bills',
+    failureRedirect: '/register',
+    failureFlash: "Login failed"
 })); 
-
-
-//route for logins 
-// (Do we need this? - Ab) 
-
-app.get('/dashboard/login', function(req, res, next) {
-    res.render('login');
-
-});
-app.post('dashboard/login', function(req, res){
-    if(!req.body.id || !req.body.password){
-       res.status("400");
-       res.send("Invalid details!");
-    } else {
-       Users.filter(function(user){
-          if(user.id === req.body.id){
-             res.render('login', {
-                message: "User Already Exists! Login or choose another user id"});
-          }
-       });
-       var newUser = {id: req.body.id, password: req.body.password};
-       Users.push(newUser);
-       req.session.user = newUser;
-       res.redirect('/protected_page');
-    }
- });
 
 //***********Google log-in route***********
 app.get('/auth/google', passport.authenticate('google', {
@@ -153,7 +158,7 @@ app.get('/auth/google/callback',
 passport.authenticate('google', {failureRedirect: '/login'}),
     (req, res) => {
         console.log(req.body)
-        return res.redirect("/bills")
+        return res.redirect("/submission")
     }
 )
 //***********end Google routes***********
@@ -173,23 +178,69 @@ app.get('logout', function(req, res, next) {
 /* app.post('/bills', function(req, res, next) {
     res.render('bills');
 }); */
+app.get('/submission', function(req, res) {
+    res.render('submission', {
+        name: req.user.firstname,
+        budgetAmount: req.user.budget
+                 
+    })
+})
+
 
 app.get('/bills', function(req, res, next) {
     console.log(req.user)
-    res.render('bills', {
-        name: req.user.firstname,
-        budgetAmount: req.user.budget
-    });
-    // console.log(req.user.emails[0].value);
-    /* console.log(req.sessionID);
-    console.log(req.session); */
-     //console.log(req.user.firstname)
+    db.expenses.findOne({
+        where: {
+            userId: req.user.id
+        }
+    }).then(function(results){
+        console.log(results)
+        if(results == null){
+            res.redirect('/submission')
+        }else{
+            //let { gas, groceries, dining, other } = 0;
+            //db.expenses.findByPk(req.user.id)
+            db.expenses.findOne({
+                where: {
+                    userId: req.user.id
+                }
+            }).then((results) => {
+                    console.log(req.user.id)
+                    console.log('This is bills ' + results)
+                    res.render('bills.ejs', {
+                        name: req.user.firstname,
+                        budgetAmount: req.user.budget,
+                        gas: results.gas,
+                        groceries: results.groceries,
+                        dining: results.dining,
+                        other: results.other
+                    })
+                })
+        }
+
+    })
+   // res.render('bills', {
+     //  name: req.user.firstname,
+       // budgetAmount: req.user.budget
+   // });
+    
 });
 
+//route for submit budget
+app.post('/submitBudget', function (req, res) {
+    console.log(req.body.budget)
+    let setBudget = parseInt(req.body.budget);
+    db.user.update(
+        {budget: setBudget },
+        {where: {id: req.user.id}})
+        .then(() => res.redirect("/submission"))
+    })
+
+
 //route for expenses
-app.get('/expenses', function(req, res, next) {
+/* app.get('/expenses', function(req, res, next) {
     res.render('expenses');
-});
+}); */
 
 //route for displaying data
 app.get('/user/:id', function(req, res, next) {
@@ -212,8 +263,118 @@ app.get('/index', function(req, res, next) {
     res.render('index.ejs')
 });
 
+// Route to display existing expenses
+
+app.get('/expenses', function(req, res, next) {
+    let { gas, groceries, dining, other } = 0;
+   
+    db.expenses.findByPk(req.user.id)
+        .then((results) => {
+            console.log(results)
+            res.render('bills.ejs', {
+                gas: results.gas,
+                groceries: results.groceries,
+                dining: results.dining,
+                other: results.other
+            })
+        })
+})
+
 // Route to view bills
 
-app.get('/bills', function(req, res, next) {
-    res.render('bills.ejs')
-});
+/* app.get('/bills', function(req, res, next) {
+    res.render('bills-initial')
+}); */
+
+// Routes to submit data
+app.post('/submitExpense', function(req, res, next) {
+    console.log(req.body)
+    console.log(req.user.id)
+    let updateColumn = req.body.expenses;
+    let newAmount = parseInt(req.body.amount);
+        if (updateColumn == 'dining') {
+            db.expenses.findOrCreate({where: {userId:req.user.id}})
+            .then(user => {
+                db.expenses.update(
+                    { dining: newAmount },
+                    { where: { userId: req.user.id }}
+                ).then(() => { res.redirect("/bills") })})
+        } else if (updateColumn == 'gas') {
+            db.expenses.findOrCreate({where: {userId:req.user.id}})
+            .then(user => {
+                db.expenses.update(
+                    { gas: newAmount },
+                    { where: { userId: req.user.id }}
+                ).then(() => { res.redirect("/bills") })})
+        } else if (updateColumn == 'groceries') {
+            db.expenses.findOrCreate({where: {userId:req.user.id}})
+            .then(user => {
+                db.expenses.update(
+                    { groceries: newAmount },
+                    { where: { userId: req.user.id }}
+                ).then(() => { res.redirect("/bills") })})
+        } else if (updateColumn == 'other') {
+            db.expenses.findOrCreate({where: {userId:req.user.id}})
+            .then(user => {
+                db.expenses.update(
+                    { other: newAmount },
+                    { where: { userId: req.user.id }}
+                ).then(() => { res.redirect("/bills") })})
+        }})
+        
+
+app.post('/submitBill', function(req, res, next) {
+    let updateColumn = req.body.bills;
+    let newAmount = parseInt(req.body.amount);
+    if (updateColumn == 'water') {
+        db.bills.findOrCreate({
+            where: { userId: req.user.id}
+        })
+        .then(user => {
+            db.bills.update(
+                { water: newAmount },
+                { where: { userId: req.user.id }}
+            ).then(() => { res.redirect("/bills") })
+        })
+    } else if (updateColumn == 'rent_mort') {
+        db.bills.findOrCreate({
+            where: { userId: req.user.id}
+        })
+        .then(user => {
+            db.bills.update(
+                { rent_mort: newAmount },
+                { where: { userId: req.user.id }}
+            ).then(() => { res.redirect("/bills") })
+        })
+    } else if (updateColumn == 'electricity') {
+        db.bills.findOrCreate({
+            where: { userId: req.user.id}
+        })
+        .then(user => {
+            db.bills.update(
+                { electricity: newAmount },
+                { where: { userId: req.user.id }}
+            ).then(() => { res.redirect("/bills") })
+        })
+    } else if (updateColumn == 'gas') {
+        db.bills.findOrCreate({
+            where: { userId: req.user.id}
+        })
+        .then(user => {
+            db.bills.update(
+                { gas: newAmount },
+                { where: { userId: req.user.id }}
+            ).then(() => { res.redirect("/bills") })
+        })
+    } else if (updateColumn == 'other') {
+        db.bills.findOrCreate({
+            where: { userId: req.user.id}
+        })
+        .then(user => {
+            db.bills.update(
+                { other: newAmount },
+                { where: { userId: req.user.id }}
+            ).then(() => { res.redirect("/bills") })
+        })
+    }
+})
