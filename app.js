@@ -115,13 +115,13 @@ app.use(flash())
 
 // Homepage
 
-app.get('/', (req,res) => {
+app.get('/', checkNotAuthenticated, (req,res) => {
     res.redirect('/login');
 })
 
 // Route for Registering Users (Local Strategy)
 
-app.get('/register', (req, res) => {
+app.get('/register', checkNotAuthenticated, (req, res) => {
     res.render('register.ejs')
 })
 
@@ -138,7 +138,7 @@ app.post('/register', async (req, res) => {
 
 // Route for Login (Local Strategy)
 
-app.get('/login', (req, res) => {
+app.get('/login', checkNotAuthenticated, (req, res) => {
     res.render('login.ejs')
 })
 
@@ -169,7 +169,6 @@ passport.authenticate('google', {failureRedirect: '/login'}),
 
 //route for logout
 app.delete('/logout', (req, res) => {
-    console.log("something went wrong")
     req.logOut()
     res.redirect('/login')
 })
@@ -179,7 +178,7 @@ app.delete('/logout', (req, res) => {
 /* app.post('/bills', function(req, res, next) {
     res.render('bills');
 }); */
-app.get('/submission', function(req, res) {
+app.get('/submission', checkAuthenticated, function(req, res) {
     res.render('submission', {
         name: req.user.firstname,
         budgetAmount: req.user.budget
@@ -188,7 +187,7 @@ app.get('/submission', function(req, res) {
 })
 
 
-app.get('/bills', function(req, res, next) {
+app.get('/bills', checkAuthenticated, function(req, res, next) {
     console.log(req.user)
     db.expenses.findOne({
         where: {
@@ -260,7 +259,7 @@ app.listen(PORT, function(){
 
 // Route to view expenses
 
-app.get('/index', function(req, res, next) {
+app.get('/index', checkAuthenticated, function(req, res, next) {
     res.render('index.ejs')
 });
 
@@ -379,3 +378,17 @@ app.post('/submitBill', function(req, res, next) {
         })
     }
 })
+
+function checkAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next()
+    }
+    res.redirect('login')
+}
+
+function checkNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+       return res.redirect('/bills')
+    }
+    next()
+}
