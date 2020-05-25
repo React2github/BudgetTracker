@@ -118,32 +118,6 @@ app.post('/login', passport.authenticate('local', {
     failureFlash: true
 })); 
 
-
-//route for logins 
-// (Do we need this? - Ab) 
-
-// app.get('/dashboard/login', function(req, res, next) {
-//     res.render('login');
-
-// });
-// app.post('dashboard/login', function(req, res){
-//     if(!req.body.id || !req.body.password){
-//        res.status("400");
-//        res.send("Invalid details!");
-//     } else {
-//        Users.filter(function(user){
-//           if(user.id === req.body.id){
-//              res.render('login', {
-//                 message: "User Already Exists! Login or choose another user id"});
-//           }
-//        });
-//        var newUser = {id: req.body.id, password: req.body.password};
-//        Users.push(newUser);
-//        req.session.user = newUser;
-//        res.redirect('/protected_page');
-//     }
-//  });
-
 //***********Google log-in route***********
 app.get('/auth/google', passport.authenticate('google', {
     scope: ['profile', 'email']
@@ -277,28 +251,28 @@ app.post('/submitExpense', function(req, res, next) {
                 db.expenses.update(
                     { dining: newAmount },
                     { where: { userId: req.user.id }}
-                ).then(() => { res.redirect("/submission") })})
+                ).then(() => { res.redirect("/bills") })})
         } else if (updateColumn == 'gas') {
             db.expenses.findOrCreate({where: {userId:req.user.id}})
             .then(user => {
                 db.expenses.update(
                     { gas: newAmount },
                     { where: { userId: req.user.id }}
-                ).then(() => { res.send("Success") })})
+                ).then(() => { res.redirect("/bills") })})
         } else if (updateColumn == 'groceries') {
             db.expenses.findOrCreate({where: {userId:req.user.id}})
             .then(user => {
                 db.expenses.update(
                     { groceries: newAmount },
                     { where: { userId: req.user.id }}
-                ).then(() => { res.send("Success") })})
+                ).then(() => { res.redirect("/bills") })})
         } else if (updateColumn == 'other') {
             db.expenses.findOrCreate({where: {userId:req.user.id}})
             .then(user => {
                 db.expenses.update(
                     { other: newAmount },
                     { where: { userId: req.user.id }}
-                ).then(() => { res.send("Success") })})
+                ).then(() => { res.redirect("/bills") })})
         }})
         
 
@@ -313,7 +287,7 @@ app.post('/submitBill', function(req, res, next) {
             db.bills.update(
                 { water: newAmount },
                 { where: { userId: req.user.id }}
-            ).then(() => { res.send("Success") })
+            ).then(() => { res.redirect("/bills") })
         })
     } else if (updateColumn == 'rent_mort') {
         db.bills.findOrCreate({
@@ -323,7 +297,7 @@ app.post('/submitBill', function(req, res, next) {
             db.bills.update(
                 { rent_mort: newAmount },
                 { where: { userId: req.user.id }}
-            ).then(() => { res.send("Success") })
+            ).then(() => { res.redirect("/bills") })
         })
     } else if (updateColumn == 'electricity') {
         db.bills.findOrCreate({
@@ -333,7 +307,7 @@ app.post('/submitBill', function(req, res, next) {
             db.bills.update(
                 { electricity: newAmount },
                 { where: { userId: req.user.id }}
-            ).then(() => { res.send("Success") })
+            ).then(() => { res.redirect("/bills") })
         })
     } else if (updateColumn == 'gas') {
         db.bills.findOrCreate({
@@ -343,7 +317,7 @@ app.post('/submitBill', function(req, res, next) {
             db.bills.update(
                 { gas: newAmount },
                 { where: { userId: req.user.id }}
-            ).then(() => { res.send("Success") })
+            ).then(() => { res.redirect("/bills") })
         })
     } else if (updateColumn == 'other') {
         db.bills.findOrCreate({
@@ -353,7 +327,7 @@ app.post('/submitBill', function(req, res, next) {
             db.bills.update(
                 { other: newAmount },
                 { where: { userId: req.user.id }}
-            ).then(() => { res.send("Success") })
+            ).then(() => { res.redirect("/bills") })
         })
     }
 })
