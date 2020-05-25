@@ -50,57 +50,109 @@
   
   <div class="expenses-list">
       <!--RENDER MONTHLY BILLS LIST-->
-        <div id="billsForm">
-          <form action="/submitBill" method="POST>
-            <div class="form-group row">
-              <label for="amount" class="col-sm-2 col-form-label">Amount</label>
-              <div class="col-sm-10">
-                <input type="integer" class="form-control" id="amount">
-              </div>
+      <div id="billsForm">
+        <form action="/submitBill" method="POST">
+          <div class="form-group row">
+            <label for="amount" class="col-sm-2 col-form-label">Amount</label>
+            <div class="col-sm-10">
+              <input type="integer" class="form-control" id="amount">
             </div>
-            <fieldset class="form-group">
-              <div class="row">
-                <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
-                <div class="col-sm-10">
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
-                    <label class="form-check-label" for="gridRadios1">
-                      Rent/Mortgage
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
-                    <label class="form-check-label" for="gridRadios2">
-                      Water
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3">
-                    <label class="form-check-label" for="gridRadios3">
-                      Electricity/Gas
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3">
-                    <label class="form-check-label" for="gridRadios3">
-                      Car
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3">
-                    <label class="form-check-label" for="gridRadios3">
-                      Other
-                    </label>
-                  </div>
+          </div>
+          <fieldset class="form-group">
+            <div class="row">
+              <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
+              <div class="col-sm-10">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="bills" id="rent_mortBill" value="rent_mort" checked>
+                  <label class="form-check-label" for="rent_mortBill">
+                    Rent/Mortgage
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="bills" id="waterBill" value="water">
+                  <label class="form-check-label" for="waterBill">
+                    Water
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="bills" id="electricityBill" value="electricity">
+                  <label class="form-check-label" for="electricityBill">
+                    Electricity
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="bills" id="gasBill" value="gas">
+                  <label class="form-check-label" for="gasBill">
+                    Gas
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="bills" id="carBill" value="car">
+                  <label class="form-check-label" for="carBill">
+                    Car
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="bills" id="otherBill" value="other">
+                  <label class="form-check-label" for="otherBill">
+                    Other
+                  </label>
                 </div>
               </div>
-            </fieldset>
-            <div class="form-group row">
+            </div>
+          </fieldset>
+          <div class="form-group row">
+            <div class="col-sm-10">
+              <button type="submit" class="btn btn-primary" formmethod="POST">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div id="expenseForm">
+        <form action="/submitExpense" method="POST">
+          <div class="form-group row">
+            <label for="amount" class="col-sm-2 col-form-label">Amount</label>
+            <div class="col-sm-10">
+              <input type="integer" class="form-control" id="amount" name="amount">
+            </div>
+          </div>
+          <fieldset class="form-group">
+            <div class="row">
+              <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
               <div class="col-sm-10">
-                <button type="submit" class="btn btn-primary" formmethod="POST">Submit</button>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="expenses" id="gasExpense" value="gas" checked>
+                  <label class="form-check-label" for="gasExpense">
+                    Gas
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="expenses" id="groceryExpense" value="groceries">
+                  <label class="form-check-label" for="groceryExpense">
+                    Groceries
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="expenses" id="diningExpense" value="dining">
+                  <label class="form-check-label" for="diningExpense">
+                    Dining Out
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="expenses" id="otherExpense" value="other">
+                  <label class="form-check-label" for="otherExpense">
+                    Other
+                  </label>
+                </div>
               </div>
             </div>
-          </form>
+          </fieldset>
+          <div class="form-group row">
+            <div class="col-sm-10">
+              <button type="submit" class="btn btn-primary" formmethod="POST">Submit</button>
+            </div>
+          </div>
+        </form>
         </div>
   </div>
   </div>
@@ -133,95 +185,3 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script> 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     </html>
-  
-//
-
-app.get('/books', (req, res) => {
-
-  const client = new Client();
-  client.connect()
-      .then(() => {
-      return  client.query('SELECT * FROM public.books;');
-      })
-      .then((results) => {
-          res.render('book-list', {
-              books: results.rows 
-          });
-      })
-      .catch((err) => {
-          console.log('error', err);
-          res.send('Something bad happened');
-      });
-  
-  });
-  
-  app.get('/book/add', (req, res) => {
-      res.render('book-form');
-  });
-  
-  app.post('/book/add', (req, res) => {
-      console.log('post body', req.body);
-  
-      const client = new Client();
-      client.connect()
-         .then(() => {
-             const sql='INSERT INTO public.books (name, authors) VALUES ($1, $2)'
-             const params=[req.body.title, req.body.authors];
-         return client.query(sql, params);
-   
-         })
-         .then((results) => {
-          //    console.log('results?', results);
-             res.redirect('/books');
-         })
-         .catch((err) => {
-             console.log('error', err);
-             res.send('Something bad happened')
-         });
-      });
-  
-      app.post('/book/delete/:id', (req, res) => {
-        console.log('deleting id', req.params.id);
-  
-        const client = new Client();
-        client.connect()
-        .then(() => {
-            const sql = 'DELETE FROM public.books WHERE bookid = $1;'
-            const params = [req.params.id];
-           return client.query(sql, params);
-        })
-        .then((results) => {
-          console.log('delete results', results);
-          res.redirect('/books')
-        })
-        .catch((err) => {
-            console.log('err', err);
-            res.redirect('/books');
-        });
-      });
-  
-  
-      app.get('/book/edit/:id', (req, res) => {
-        const client = new Client();
-        client.connect()
-        .then(() => {
-            const sql="Select * from public.books where bookid = $1;"
-            const params = [req.params.id];
-            return client.query(sql, params);
-        })
-        .then((results) => {
-  
-          if(results.rowCount === 0) {
-              res.redirect('/books');
-              return;
-          }
-            res.render('book-edit', {
-                book: results.rows[0]
-            });
-        })
-      .catch((err) => {
-          console.log('edit get err', err);
-          res.redirect('/books');
-      });
-  });
-  //
