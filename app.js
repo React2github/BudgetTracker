@@ -1,6 +1,6 @@
-if(process.env.Node_ENV !== 'production') {
+
     require('dotenv').config()
-}
+
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -10,7 +10,7 @@ const session = require('express-session');
 const bcrypt = require('bcrypt');
 const db = require('./models');
 const app = express();
-PORT = process.env.PORT || 5432;
+PORT = process.env.PORT || 3000;
 
 
 app.set('view engine', 'ejs');
