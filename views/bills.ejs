@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include("partials/header2.ejs") %> 
+  <head>
+  <%- include("partials/header2.ejs") %>
+</head>
   <body>
     <!--HEADER CONTENT-->
     <div class="jumbotron jumbotron-fluid">
@@ -15,46 +17,47 @@
     <div class="greeting">
       <!--USER FIELD WILL POPULATE WITH INFO FROM DATABASE.-->
       <h2>Hello, <%=name %>!</h2>
+  
     </div>
 
     <div class="expenses">
       <h2>Your budget is <%=budgetAmount %> </h2>
       <h3>Your Monthly Bills</h3>
-      <ul class="nav justify-content-end">
+      <!-- <ul class="nav justify-content-end">
         <li class="nav-item">
           <a class="nav-link active" href="/index">View Weekly Expenses</a>
-        </li>
+        </li> -->
     </div>
     
-
-<div class="expenses-container">
-  <div class="expenses-chart">
+    <div class="ct-chart ct-minor-sixth"></div>
+<!-- <div class="expenses-container">
+  <div class="expenses-chart"> -->
       <!--RENDER MONTHLY BILLS CHART. CAN ADJUST THE ASPECT RATIO AS NEEDED-->
-      <div class="ct-chart ct-minor-sixth"></div>
-  </div>
+      <!-- <div class="ct-chart ct-minor-sixth"></div> -->
+  <!-- </div> -->
   
-  <div class="expenses-list">
+  <!-- <div class="expenses-list">
       <!--RENDER MONTHLY BILLS LIST-->
-      <div id="billsForm">
+      <!-- <div id="billsForm">
         <form action="/submitBill" method="POST">
           <div class="form-group row">
-            <label for="amount" class="col-sm-2 col-form-label">Amount</label>
+            <label for="amount" class="col-sm-3 col-form-label">Amount</label>
             <div class="col-sm-10">
               <input type="integer" class="form-control" id="amount">
-            </div>
-      <div class="dropdown">
+            </div>  -->
+      <!-- <div class="dropdown">
           <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Add a Bill
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          </button> -->
+          <!-- <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <a class="dropdown-item" href="#">Rent/Mortgage</a>
             <a class="dropdown-item" href="#">Water</a>
             <a class="dropdown-item" href="#">Electricity/Gas</a>
             <a class="dropdown-item" href="#">Car</a>
             <a class="dropdown-item" href="#">Other</a>
 
-          </div>
-          <fieldset class="form-group">
+          </div> -->
+          <!-- <fieldset class="form-group">
             <div class="row">
               <legend class="col-form-label col-sm-2 pt-0">Type</legend>
               <div class="col-sm-10">
@@ -96,25 +99,25 @@
                 </div>
               </div>
             </div>
-          </fieldset>
-          <div class="form-group row">
+          </fieldset> -->
+          <!-- <div class="form-group row">
             <div class="col-sm-10">
               <button type="submit" class="btn btn-primary" formmethod="POST">Submit</button>
             </div>
           </div>
         </form>
-      </div>
+      </div> -->
       <div id="expenseForm">
-        <form action="/submitExpense" method="POST">
+        <form action="/submitExpense" method="POST"> 
           <div class="form-group row">
             <label for="amount" class="col-sm-2 col-form-label">Amount</label>
-            <div class="col-sm-10">
+            <div class="col-sm-2">
               <input type="integer" class="form-control" id="amount" name="amount">
-            </div>
           </div>
           <fieldset class="form-group">
+            <br>
             <div class="row">
-              <legend class="col-form-label col-sm-2 pt-0">Type</legend>
+              <legend class="col-form-label col-sm-5 pt-0">Type</legend>
               <div class="col-sm-10">
                 <div class="form-check">
                   <input class="form-check-input" type="radio" name="expenses" id="gasExpense" value="gas" checked>
@@ -144,25 +147,25 @@
             </div>
           </fieldset>
           <div class="form-group row">
-            <div class="col-sm-10">
+            <div class="col-sm-3">
               <button type="submit" class="btn btn-primary" formmethod="POST">Submit</button>
             </div>
           </div>
         </form>
         </div>
         
-<div class="expenses-container">
+<!-- <div class="expenses-container">
   <div class="expenses-chart">
-      <!--RENDER MONTHLY BILLS CHART. CAN ADJUST THE ASPECT RATIO AS NEEDED-->
-      <div class="ct-chart ct-minor-sixth"></div>
-  </div>
-  
-  <div class="expenses-list">
-      <!--RENDER MONTHLY BILLS LIST-->
+RENDER MONTHLY BILLS CHART. CAN ADJUST THE ASPECT RATIO AS NEEDED-->
+      <!-- <div class="ct-chart ct-minor-sixth"></div>
+  </div> -->
+   <!-- --> 
+  <!-- <div class="expenses-list">
+      RENDER MONTHLY BILLS LIST-->
       
-
-  </div>
-  </div>
+<!-- 
+  </div> -->
+  <!-- </div> -->
     </body>
     
     <script>
@@ -172,8 +175,8 @@
     };
     
     var options = {
-      chartPadding: 30,
-      labelOffset: 50,
+      chartPadding: 50,
+      labelOffset: 130,
       labelDirection: 'explode'
     };
     
@@ -189,6 +192,6 @@
     </script> 
   
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     </html>
