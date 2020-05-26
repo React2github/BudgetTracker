@@ -10,7 +10,7 @@ const session = require('express-session');
 const bcrypt = require('bcrypt');
 const db = require('./models');
 const app = express();
-PORT = process.env.PORT || 3000;
+PORT = process.env.PORT || 5432;
 
 
 app.set('view engine', 'ejs');
