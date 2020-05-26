@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include("partials/header.ejs") %> 
+<%- include("partials/header.ejs") %>
 <body>
     <div class="jumbotron jumbotron-fluid">
         <div class="container text-center">
@@ -9,7 +9,7 @@
     </div>
     <div class="container" style="background-color:#f1f1f1">
         <form action="/login" method="POST">
-            <div class='login-input'>
+            <!-- <div class='login-input'>
                 <label for='email'><b>Email</b></label>
                 <input type='email' placeholder="Enter Email" id='email' name='email' 
                 required>
@@ -19,11 +19,13 @@
                 <input type="password" placeholder="Enter Password" name="password" required>
             </div>
             <div class="login-input">
-                <button type="submit">Login</button>
+                <button type="submit">Login</button> -->
                 <!-- <label>
                 <input type="checkbox" checked="blank" name="remember"> Remember me -->
                 <!-- </label> -->
-                <h4 class="psw"><a href="/register">Create User</a></h4><h4><a href="/auth/google">Log-in with Google</a></h4>
+                 <h4 class="psw">
+                     <!-- <a href="/register">Create User</a> -->
+                    </h4><h4><a href="/auth/google">Log-in with Google</a></h4>
             </div>
         </form>
     </div>

@@ -115,13 +115,13 @@ app.use(flash())
 
 // Homepage
 
-app.get('/', checkNotAuthenticated, (req,res) => {
+app.get('/', (req,res) => {
     res.redirect('/login');
 })
 
 // Route for Registering Users (Local Strategy)
 
-app.get('/register', checkNotAuthenticated, (req, res) => {
+app.get('/register', (req, res) => {
     res.render('register.ejs')
 })
 
@@ -142,21 +142,21 @@ app.get('/login', checkNotAuthenticated, (req, res) => {
     res.render('login.ejs')
 })
 
-app.post('/login', passport.authenticate('local', {
+app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
     successRedirect: '/bills',
     failureRedirect: '/register',
     failureFlash: "Login failed"
 })); 
 
 //***********Google log-in route***********
-app.get('/auth/google', passport.authenticate('google', {
+app.get('/auth/google', checkNotAuthenticated,passport.authenticate('google', {
     scope: ['profile', 'email']
     }
     
 ));
 
 //Google callback URL
-app.get('/auth/google/callback', 
+app.get('/auth/google/callback', checkNotAuthenticated, 
 passport.authenticate('google', {failureRedirect: '/login'}),
     (req, res) => {
         console.log(req.body)
@@ -167,11 +167,13 @@ passport.authenticate('google', {failureRedirect: '/login'}),
 
 
 
-//route for logout
-app.delete('/logout', (req, res) => {
-    req.logOut()
-    res.redirect('/login')
-})
+// //route for logout
+// app.get('logout', function(req, res, next) {
+//     req.session.destroy(function() {
+//         console.log("You are now logged out.")
+//     })
+//     res.redirect('/login');
+// });
 
 
 //route for bills
@@ -187,7 +189,7 @@ app.get('/submission', checkAuthenticated, function(req, res) {
 })
 
 
-app.get('/bills', checkAuthenticated, function(req, res, next) {
+app.get('/bills', checkAuthenticated,function(req, res, next) {
     console.log(req.user)
     db.expenses.findOne({
         where: {
@@ -196,7 +198,6 @@ app.get('/bills', checkAuthenticated, function(req, res, next) {
     }).then(function(results){
         console.log(results)
         if(results == null){
-            alert("You haven't entered any data")
             res.redirect('/submission')
         }else{
             //let { gas, groceries, dining, other } = 0;
@@ -214,6 +215,7 @@ app.get('/bills', checkAuthenticated, function(req, res, next) {
                         gas: results.gas,
                         groceries: results.groceries,
                         dining: results.dining,
+                        water: results.water,
                         other: results.other
                     })
                 })
@@ -267,13 +269,14 @@ app.get('/index', checkAuthenticated, function(req, res, next) {
 // Route to display existing expenses
 
 app.get('/expenses', function(req, res, next) {
-    let { gas, groceries, dining, other } = 0;
+    let { gas, groceries, dining, water, other } = 0;
    
     db.expenses.findByPk(req.user.id)
         .then((results) => {
             console.log(results)
             res.render('bills.ejs', {
                 gas: results.gas,
+                water: results.water,
                 groceries: results.groceries,
                 dining: results.dining,
                 other: results.other
@@ -281,7 +284,25 @@ app.get('/expenses', function(req, res, next) {
         })
 })
 
+// route to view monthly bills 
+
+// app.get('/monthlyBills', function(req, res, next) {
+//     let { water, rent_mort, electricity, gas } = 0;
+   
+//     db.bills.findByPk(req.user.id)
+//         .then((results) => {
+//             console.log(results)
+//             res.render('bills.ejs', {
+//                 water: results.water,
+//                 gas: results.gas,
+//                 electricity: results.electricity,
+//                 rent_mort: results.rent_mort
+//             })
+//         })
+// })
+
 // Route to view bills
+
 
 /* app.get('/bills', function(req, res, next) {
     res.render('bills-initial')
@@ -321,6 +342,14 @@ app.post('/submitExpense', function(req, res, next) {
                     { other: newAmount },
                     { where: { userId: req.user.id }}
                 ).then(() => { res.redirect("/bills") })})
+            } else if (updateColumn == 'water') {
+                db.expenses.findOrCreate({where: {userId:req.user.id}})
+                .then(user => {
+                    db.expenses.update(
+                        { water: newAmount },
+                        { where: { userId: req.user.id }},
+
+                    ).then(() => { res.redirect("/bills") })})
         }})
         
 
@@ -328,15 +357,12 @@ app.post('/submitBill', function(req, res, next) {
     let updateColumn = req.body.bills;
     let newAmount = parseInt(req.body.amount);
     if (updateColumn == 'water') {
-        db.bills.findOrCreate({
-            where: { userId: req.user.id}
-        })
+        db.bills.findOrCreate({ where: { userId: req.user.id}})
         .then(user => {
             db.bills.update(
                 { water: newAmount },
                 { where: { userId: req.user.id }}
-            ).then(() => { res.redirect("/bills") })
-        })
+            ).then(() => { res.redirect("/bills") })})
     } else if (updateColumn == 'rent_mort') {
         db.bills.findOrCreate({
             where: { userId: req.user.id}
@@ -380,6 +406,11 @@ app.post('/submitBill', function(req, res, next) {
     }
 })
 
+app.delete('/logout', (req, res) => {
+    req.logOut()
+    res.redirect('/login')
+})
+
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next()
@@ -389,7 +420,7 @@ function checkAuthenticated(req, res, next) {
 
 function checkNotAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
-       return res.redirect('/bills')
+       return res.redirect('/submission')
     }
     next()
 }
