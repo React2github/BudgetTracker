@@ -201,7 +201,7 @@ app.get('/bills', checkAuthenticated,function(req, res, next) {
     }).then(function(results){
         console.log(results)
         if(results == null){
-            res.redirect('/status', {url: req.path})
+            res.render('status', {url: req.path})
 
         }else{
             //let { gas, groceries, dining, other } = 0;
