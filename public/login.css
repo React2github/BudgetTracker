@@ -35,9 +35,9 @@
   }
 
 .containers {
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
     margin: 50px;
     padding: 10px;
 }
@@ -68,4 +68,14 @@
 
 .login-input {
   height: auto;
+}
+
+.welcome {
+  display: flex;
+}
+
+.login {
+  display: flex;
+  justify-content: center;
+  margin: 100px;
 }

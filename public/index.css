@@ -85,3 +85,12 @@ h3 {
 .col-sm-10 {
   padding: 0px;
 }
+
+#expenseForm {
+  display: flex;
+  justify-content: center;
+}
+
+.amount-tag {
+  margin: 10px;
+}

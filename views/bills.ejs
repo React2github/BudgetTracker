@@ -110,11 +110,13 @@
       <div id="expenseForm">
         <form action="/submitExpense" method="POST"> 
           <div class="form-group row">
+            <div class="amount-tag">
             <label for="amount" class="col-sm-2 col-form-label">Amount</label>
-            <div class="col-sm-2">
-              <input type="integer" class="form-control" id="amount" name="amount">
-          </div>
+            <input type="integer" class="form-control" id="amount" name="amount">
+            </div>
+            <div class="amount-tag">
           <fieldset class="form-group">
+            </div>
             <br>
             <div class="row">
               <legend class="col-form-label col-sm-5 pt-0">Type</legend>
